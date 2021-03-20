@@ -165,7 +165,7 @@ class Game:
             
             rotated = pygame.transform.rotate(car_image, degrees(-car.direction))
             rect = rotated.get_rect()
-            self.screen.blit(rotated, car.displayPos2 - (rect.width / 2, rect.height / 2))
+            self.screen.blit(rotated, car.displayPos2 - (rect.width / 2, rect.height / 2))y
             pygame.draw.circle(self.screen, (255, 255, 0), (300, 300), 15, 10)
             pygame.draw.circle(self.screen, (255, 255, 0), (900, 300), 15, 10)
 
