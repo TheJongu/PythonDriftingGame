@@ -38,10 +38,10 @@ class Car:
             self.friction()
 
         theDeceleration = 0
-        if abs(self.steerAngle) > 1.6: theDeceleration += 2 
-        if abs(self.steerAngle) > 2.0: theDeceleration += 2
-        if abs(self.steerAngle) > 2.4: theDeceleration += 5
-        if abs(self.steerAngle) > 2.8: theDeceleration += 5
+        if abs(self.steerAngle) > 1.6: theDeceleration += 5 
+        if abs(self.steerAngle) > 2.0: theDeceleration += 5
+        if abs(self.steerAngle) > 2.4: theDeceleration += 10
+        if abs(self.steerAngle) > 2.8: theDeceleration += 10
         
         if self.speed > 0: self.speed -= theDeceleration
         else: self.speed += theDeceleration
@@ -78,8 +78,8 @@ class Car:
     def steerRight(self):
         theSteerAngle = -0.01
         if abs(self.speed) > 0:
-            if self.steerAngle > 0: theSteerAngle = -0.1 
-            elif self.steerAngle > -1.0: theSteerAngle = -0.060
+            if self.steerAngle > 0: theSteerAngle = -0.05
+            elif self.steerAngle > -1.0: theSteerAngle = -0.040
             elif self.steerAngle > -1.5: theSteerAngle = -0.025 
             elif self.steerAngle > -3.0: theSteerAngle = -0.005
             self.steerAngle += theSteerAngle
@@ -89,8 +89,8 @@ class Car:
     def steerLeft(self):
         theSteerAngle = 0.01
         if abs(self.speed) > 0:
-            if self.steerAngle < 0: theSteerAngle = 0.1
-            elif self.steerAngle < 1.0: theSteerAngle = 0.060 
+            if self.steerAngle < 0: theSteerAngle = 0.05
+            elif self.steerAngle < 1.0: theSteerAngle = 0.040 
             elif self.steerAngle < 1.5: theSteerAngle = 0.025
             elif self.steerAngle < 3.0: theSteerAngle = 0.005 
             self.steerAngle += theSteerAngle
@@ -162,20 +162,18 @@ class Game:
 
             # Drawing
             self.screen.fill((50, 50, 50))
-            
-            pygame.draw.circle(self.screen, (abs(car.steerAngle)*80, abs(car.steerAngle)*80, abs(car.steerAngle)*80), car.displayPos1, 15, 10)
-            pygame.draw.circle(self.screen, (abs(car.steerAngle)*80, abs(car.steerAngle)*80, abs(car.steerAngle)*80), car.displayPos2, 15, 10)
-            pygame.draw.circle(self.screen, (abs(car.steerAngle)*80, abs(car.steerAngle)*80, abs(car.steerAngle)*80), car.displayPos3, 15, 10)
-            pygame.draw.circle(self.screen, (abs(car.steerAngle)*80, abs(car.steerAngle)*80, abs(car.steerAngle)*80), car.displayPos4, 15, 10)
-            pygame.draw.circle(self.screen, (0,255,0), car.displayPosFront, 5, 10)
-            pygame.draw.circle(self.screen, (255,0,0), car.displayPosBack, 5, 10)
-
             pygame.draw.circle(self.screen, (255, 255, 0), (300, 300), 15, 10)
             pygame.draw.circle(self.screen, (255, 255, 0), (900, 300), 15, 10)
            
-
-            pygame.draw.circle(self.screen, (100,255,0), car.frontWheel, 5, 10)
-            pygame.draw.circle(self.screen, (255,100,0), car.turningWheel, 5, 10)
+            pygame.draw.circle(self.screen, (255,165,0), car.displayPos1, 15, 10)
+            pygame.draw.circle(self.screen, (255,165,0), car.displayPos2, 15, 10)
+            pygame.draw.circle(self.screen, (255,165,0), car.displayPos3, 15, 10)
+            pygame.draw.circle(self.screen, (255,165,0), car.displayPos4, 15, 10)
+            pygame.draw.circle(self.screen, (0,255,0), car.displayPosFront, 5, 10)
+            pygame.draw.circle(self.screen, (255,0,0), car.displayPosBack, 5, 10)
+            
+            #pygame.draw.circle(self.screen, (100,255,0), car.frontWheel, 5, 10)
+            #pygame.draw.circle(self.screen, (255,100,0), car.turningWheel, 5, 10)
 
 
             pygame.display.flip()
