@@ -162,18 +162,24 @@ class Game:
 
             # Drawing
             self.screen.fill((50, 50, 50))
+            
+            rotated = pygame.transform.rotate(car_image, degrees(-car.direction))
+            rect = rotated.get_rect()
+            self.screen.blit(rotated, car.displayPos2 - (rect.width / 2, rect.height / 2))
             pygame.draw.circle(self.screen, (255, 255, 0), (300, 300), 15, 10)
             pygame.draw.circle(self.screen, (255, 255, 0), (900, 300), 15, 10)
-           
-            pygame.draw.circle(self.screen, (255,165,0), car.displayPos1, 15, 10)
-            pygame.draw.circle(self.screen, (255,165,0), car.displayPos2, 15, 10)
-            pygame.draw.circle(self.screen, (255,165,0), car.displayPos3, 15, 10)
-            pygame.draw.circle(self.screen, (255,165,0), car.displayPos4, 15, 10)
-            pygame.draw.circle(self.screen, (0,255,0), car.displayPosFront, 5, 10)
-            pygame.draw.circle(self.screen, (255,0,0), car.displayPosBack, 5, 10)
+
+            #pygame.draw.circle(self.screen, (255,165,0), car.displayPos1, 15, 10)
+            #pygame.draw.circle(self.screen, (255,165,0), car.displayPos2, 15, 10)
+            #pygame.draw.circle(self.screen, (255,165,0), car.displayPos3, 15, 10)
+            #pygame.draw.circle(self.screen, (255,165,0), car.displayPos4, 15, 10)
+            #pygame.draw.circle(self.screen, (0,255,0), car.displayPosFront, 5, 10)
+            #pygame.draw.circle(self.screen, (255,0,0), car.displayPosBack, 5, 10)
             
             #pygame.draw.circle(self.screen, (100,255,0), car.frontWheel, 5, 10)
             #pygame.draw.circle(self.screen, (255,100,0), car.turningWheel, 5, 10)
+
+           
 
 
             pygame.display.flip()
