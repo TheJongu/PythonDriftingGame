@@ -41,7 +41,7 @@ class Car:
         if abs(self.steerAngle) > 1.6: theDeceleration += 5 
         if abs(self.steerAngle) > 2.0: theDeceleration += 5
         if abs(self.steerAngle) > 2.4: theDeceleration += 10
-        if abs(self.steerAngle) > 2.8: theDeceleration += 10
+        if abs(self.steerAngle) > 2.8: theDeceleration += 20
         
         if self.speed > 0: self.speed -= theDeceleration
         else: self.speed += theDeceleration
@@ -166,9 +166,17 @@ class Game:
             rotated = pygame.transform.rotate(car_image, degrees(-car.direction))
             rect = rotated.get_rect()
             self.screen.blit(rotated, car.displayPos2 - (rect.width / 2, rect.height / 2))
-            pygame.draw.circle(self.screen, (255, 255, 0), (300, 300), 15, 10)
-            pygame.draw.circle(self.screen, (255, 255, 0), (900, 300), 15, 10)
-
+            
+            if abs(car.steerAngle) < 1.2:
+                pygame.draw.circle(self.screen, (0, 255, 0), (300, 300), 15, 10)
+                pygame.draw.circle(self.screen, (0, 255, 0), (900, 300), 15, 10)
+            elif abs(car.steerAngle) < 1.6:
+                pygame.draw.circle(self.screen, (255, 255, 0), (300, 300), 15, 10)
+                pygame.draw.circle(self.screen, (255, 255, 0), (900, 300), 15, 10)
+            elif abs(car.steerAngle) >= 1.6:
+                pygame.draw.circle(self.screen, (255, 0, 0), (300, 300), 15, 10)
+                pygame.draw.circle(self.screen, (255, 0, 0), (900, 300), 15, 10)
+            
             #pygame.draw.circle(self.screen, (255,165,0), car.displayPos1, 15, 10)
             #pygame.draw.circle(self.screen, (255,165,0), car.displayPos2, 15, 10)
             #pygame.draw.circle(self.screen, (255,165,0), car.displayPos3, 15, 10)
