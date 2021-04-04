@@ -1,7 +1,9 @@
 import os
 import pygame
-from math import sin, cos, atan2, radians, degrees, copysign
-from pygame.math import Vector2
+import random
+from math import sin, cos, tan,atan2, radians, degrees, copysign
+from pygame import Vector2
+pygame.font.init()
 
 class Car:
     def __init__(self, x, y, aMaxSpeed = 600, aBackSpeed = -100, aMinWheelbase = 50, aMaxWheelbase = 500):
@@ -15,7 +17,6 @@ class Car:
 
         self.turningWheel = Vector2(0, 0)
         self.frontWheel = Vector2(0, 0)
-
         self.displayPosFront = Vector2(0, 0)
         self.displayPosBack = Vector2(0, 0)
         self.displayPos1 = Vector2(0, 0)
@@ -28,6 +29,9 @@ class Car:
         self.speed = 0
         self.steerAngle = 0
         self.direction = 0
+
+        self.skidMarkList = []
+
     # Process the pressed Buttons on the Keyboard
     def processInputs(self, aPressedKey, aDelta):
         if aPressedKey[pygame.K_UP]:
@@ -105,7 +109,31 @@ class Car:
         if(self.wheelBase > self.MAXWHEELBASE):
             self.wheelBase = self.MAXWHEELBASE
         
-            
+    def drawSkidMarks(self, aScreen):  
+
+        red = 255
+        green = 50
+        blue = 0        
+        for aSkidMark in self.skidMarkList:
+            pygame.draw.rect(aScreen, (red, green, blue, 0), aSkidMark, 5, 1)
+            if red == 255 and blue == 0:
+                green  += 5
+            if green == 255 and blue == 0:
+                red -= 5
+            if red == 0 and green == 255:
+                blue += 5
+            if blue == 255 and red == 0:
+                green -= 5
+            if green == 0 and blue == 255:
+                red  += 5
+            if red == 255 and green == 0:
+                blue -= 5
+            #green -= 1
+            #if green < 0: green = 0
+
+        if(len(self.skidMarkList) > 500):
+            del self.skidMarkList[:2]
+
 
     def update(self, dt):
 
@@ -127,18 +155,32 @@ class Car:
         self.position = (self.turningWheel + self.frontWheel) / 2
         self.direction = atan2( self.frontWheel.y - self.turningWheel.y , self.frontWheel.x - self.turningWheel.x )
 
+        if abs(self.steerAngle) > 1:
+
+            theOffsetAngle = degrees(self.direction) + 90 
+            if degrees(self.direction) > 90:
+                theOffsetAngle -= 360
+
+            theOffsetVectorRR = Vector2(cos(radians(theOffsetAngle)), sin(radians(theOffsetAngle))) * 12
+
+            self.skidMarkList.append((self.position.x + theOffsetVectorRR.x - 3, self.position.y + theOffsetVectorRR.y - 5 ,5 ,5 ))
+            self.skidMarkList.append((self.position.x - theOffsetVectorRR.x - 3, self.position.y - theOffsetVectorRR.y - 5 ,5 ,5 ))
+
 
 
 class Game:
+    myfont = pygame.font.SysFont('Comic Sans MS', 30)
     def __init__(self):
         pygame.init()
         pygame.display.set_caption("Car Drifting Game")
-        width = 1280
-        height = 720
+        width = 1600
+        height = 900
         self.screen = pygame.display.set_mode((width, height))
         self.clock = pygame.time.Clock()
         self.ticks = 60
         self.exit = False
+        
+        
 
     def run(self):
         current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -162,25 +204,33 @@ class Game:
 
             # Drawing
             self.screen.fill((50, 50, 50))
-            
+            car.drawSkidMarks(self.screen)
             rotated = pygame.transform.rotate(car_image, degrees(-car.direction))
             rect = rotated.get_rect()
-            self.screen.blit(rotated, car.displayPos2 - (rect.width / 2, rect.height / 2))y
+            self.screen.blit(rotated, car.displayPos2 - (rect.width / 2, rect.height / 2))
             pygame.draw.circle(self.screen, (255, 255, 0), (300, 300), 15, 10)
             pygame.draw.circle(self.screen, (255, 255, 0), (900, 300), 15, 10)
 
-            #pygame.draw.circle(self.screen, (255,165,0), car.displayPos1, 15, 10)
-            #pygame.draw.circle(self.screen, (255,165,0), car.displayPos2, 15, 10)
-            #pygame.draw.circle(self.screen, (255,165,0), car.displayPos3, 15, 10)
-            #pygame.draw.circle(self.screen, (255,165,0), car.displayPos4, 15, 10)
-            #pygame.draw.circle(self.screen, (0,255,0), car.displayPosFront, 5, 10)
-            #pygame.draw.circle(self.screen, (255,0,0), car.displayPosBack, 5, 10)
+            
+
+            #theOffset = 26 * Vector2(cos( tan(24/12) * - car.direction ), sin(tan(24/12) * -car.direction))
+
+            #pygame.draw.rect(self.screen, (200, 0, 0), (car.position.x-5, car.position.y-5, 10, 10), 10, 1)
+            #pygame.draw.rect(self.screen, (0, 200, 0), (car.position.x + theOffsetVectorRR.x -5, car.position.y + theOffsetVectorRR.y -5, 10, 10), 10, 1)
+            #Green
+            #pygame.draw.rect(self.screen, (0, 0, 200), (car.position.x - theOffsetVectorRR.x - 5, car.position.y - theOffsetVectorRR.y - 5, 10, 10), 10, 1)
             
             #pygame.draw.circle(self.screen, (100,255,0), car.frontWheel, 5, 10)
             #pygame.draw.circle(self.screen, (255,100,0), car.turningWheel, 5, 10)
 
-           
-
+            # textsurface = self.myfont.render("Direction: " + str(degrees(car.direction)) + 
+            #                                 "theOffsetAngle: " + str(theOffsetAngle)
+            #                                 , False, (0, 0, 0))
+            
+            # textsurfaceVector = self.myfont.render("theOffsetVectorRR: " + str(theOffsetVectorRR) 
+            #                                 , False, (0, 0, 0))
+            #self.screen.blit(textsurface,(0,0))
+            #self.screen.blit(textsurfaceVector,(0,30))
 
             pygame.display.flip()
 
