@@ -161,10 +161,10 @@ class Car:
             if degrees(self.direction) > 90:
                 theOffsetAngle -= 360
 
-            theOffsetVectorRR = Vector2(cos(radians(theOffsetAngle)), sin(radians(theOffsetAngle))) * 12
+            theOffsetVectorRR = Vector2(cos(radians(theOffsetAngle)), sin(radians(theOffsetAngle))) * 24
 
-            self.skidMarkList.append((self.position.x + theOffsetVectorRR.x - 3, self.position.y + theOffsetVectorRR.y - 5 ,5 ,5 ))
-            self.skidMarkList.append((self.position.x - theOffsetVectorRR.x - 3, self.position.y - theOffsetVectorRR.y - 5 ,5 ,5 ))
+            self.skidMarkList.append((self.position.x + theOffsetVectorRR.x - 3, self.position.y + theOffsetVectorRR.y - 5 ,10 ,10 ))
+            self.skidMarkList.append((self.position.x - theOffsetVectorRR.x - 3, self.position.y - theOffsetVectorRR.y - 5 ,10 ,10 ))
 
 
 
