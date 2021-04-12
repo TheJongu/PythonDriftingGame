@@ -52,7 +52,6 @@ class Game:
             
             pygame.draw.circle(self.screen, self.theCircleColor, (400, 450), 15, 10)
             pygame.draw.circle(self.screen, self.theCircleColor, (1200, 450 ), 15, 10)
-            SkidMark((50, 50),0, 150, 0).update(self.screen,0)
             #theOffset = 26 * Vector2(cos( tan(24/12) * - car.direction ), sin(tan(24/12) * -car.direction))
 
             #pygame.draw.rect(self.screen, (200, 0, 0), (car.position.x-5, car.position.y-5, 10, 10), 10, 1)
@@ -67,10 +66,8 @@ class Game:
             #                                 "theOffsetAngle: " + str(theOffsetAngle)
             #                                 , False, (0, 0, 0))
 
-            # textsurfaceVector = self.myfont.render("theOffsetVectorRR: " + str(theOffsetVectorRR)
-            #                                 , False, (0, 0, 0))
-            #self.screen.blit(textsurface,(0,0))
-            #self.screen.blit(textsurfaceVector,(0,30))
+            textsurfaceVector = self.myfont.render("Carspeed: " + str(car.speed), False, (0, 0, 0))
+            self.screen.blit(textsurfaceVector,(0,30))
 
             pygame.display.flip()
 
