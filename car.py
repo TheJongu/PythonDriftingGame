@@ -2,6 +2,7 @@ import pygame
 import random
 from math import sin, cos, tan,atan2, radians, degrees, copysign
 from pygame import Vector2
+from skidmark import SkidMark
 
 class Car:
     """
@@ -204,28 +205,11 @@ class Car:
                 the car
             aScreen: screen
                 the screen the skidmarks are to be drawn to
-        """
-        red = 255
-        green = 100
-        blue = 0        
+        """     
         for aSkidMark in self.skidMarkList:
-            pygame.draw.rect(aScreen, (random.randint(0,255),random.randint(0,255), random.randint(0,255), 0), aSkidMark, 5, 1)
-            if red == 255 and blue == 0:
-                green  += 5
-            if green == 255 and blue == 0:
-                red -= 5
-            if red == 0 and green == 255:
-                blue += 5
-            if blue == 255 and red == 0:
-                green -= 5
-            if green == 0 and blue == 255:
-                red  += 5
-            if red == 255 and green == 0:
-                blue -= 5
-            #green -= 1
-            #if green < 0: green = 0
+            aSkidMark.update(aScreen,0)
 
-        if(len(self.skidMarkList) > 500):
+        if(len(self.skidMarkList) > 1000):
             del self.skidMarkList[:2]
 
 
@@ -264,7 +248,8 @@ class Car:
             if degrees(self.direction) > 90:
                 theOffsetAngle -= 360
 
-            theOffsetVectorRR = Vector2(cos(radians(theOffsetAngle)), sin(radians(theOffsetAngle))) * 24
+            theOffsetVectorRR = Vector2(cos(radians(theOffsetAngle)), sin(radians(theOffsetAngle))) * 18
 
-            self.skidMarkList.append((self.position.x + theOffsetVectorRR.x - 3, self.position.y + theOffsetVectorRR.y - 5 , 10 , 10 ))
-            self.skidMarkList.append((self.position.x - theOffsetVectorRR.x - 3, self.position.y - theOffsetVectorRR.y - 5 , 10 , 10 ))
+            self.skidMarkList.append(SkidMark((self.position.x + theOffsetVectorRR.x, self.position.y + theOffsetVectorRR.y),degrees(-self.direction), 250, self.speed))
+            self.skidMarkList.append(SkidMark((self.position.x - theOffsetVectorRR.x, self.position.y - theOffsetVectorRR.y),degrees(-self.direction), 150, self.speed))
+           
