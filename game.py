@@ -42,7 +42,7 @@ class Game:
             pressed = pygame.key.get_pressed()
 
             car.processInputs(pressed, dt)
-
+            # Camera https://www.youtube.com/watch?v=3zV2ewk-IGU
             # Drawing
             self.screen.fill((100, 100, 100))
             car.drawSkidMarks(self.screen)
@@ -52,19 +52,6 @@ class Game:
             
             pygame.draw.circle(self.screen, self.theCircleColor, (400, 450), 15, 10)
             pygame.draw.circle(self.screen, self.theCircleColor, (1200, 450 ), 15, 10)
-            #theOffset = 26 * Vector2(cos( tan(24/12) * - car.direction ), sin(tan(24/12) * -car.direction))
-
-            #pygame.draw.rect(self.screen, (200, 0, 0), (car.position.x-5, car.position.y-5, 10, 10), 10, 1)
-            #pygame.draw.rect(self.screen, (0, 200, 0), (car.position.x + theOffsetVectorRR.x -5, car.position.y + theOffsetVectorRR.y -5, 10, 10), 10, 1)
-            #Green
-            #pygame.draw.rect(self.screen, (0, 0, 200), (car.position.x - theOffsetVectorRR.x - 5, car.position.y - theOffsetVectorRR.y - 5, 10, 10), 10, 1)
-
-            #pygame.draw.circle(self.screen, (100,255,0), car.frontWheel, 5, 10)
-            #pygame.draw.circle(self.screen, (255,100,0), car.turningWheel, 5, 10)
-
-            # textsurface = self.myfont.render("Direction: " + str(degrees(car.direction)) +
-            #                                 "theOffsetAngle: " + str(theOffsetAngle)
-            #                                 , False, (0, 0, 0))
 
             textsurfaceVector = self.myfont.render("Carspeed: " + str(car.speed), False, (0, 0, 0))
             self.screen.blit(textsurfaceVector,(0,30))
