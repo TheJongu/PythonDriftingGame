@@ -1,3 +1,10 @@
+"""The Game which uses the other python files.
+
+Runs a simple drifting game.
+
+"""
+
+
 import os
 import pygame
 import random
@@ -9,6 +16,10 @@ from car import Car
 from skidmark import SkidMark
 
 class Game:
+    """
+        
+    """
+
     myfont = pygame.font.SysFont('Comic Sans MS', 30)
     theCircleColor = (255, 255, 0)
     def __init__(self):
@@ -24,6 +35,14 @@ class Game:
 
 
     def run(self):
+        """ Inits all the Runs the game
+            Contains the game loop.
+
+            Tests:
+                * Does the game Stop if requested?
+                * Does the game run at the correct fps?
+        """
+
         current_dir = os.path.dirname(os.path.abspath(__file__))
         image_path = os.path.join(current_dir, "car.png")
         car_image = pygame.image.load(image_path)
@@ -61,7 +80,7 @@ class Game:
             self.clock.tick(self.ticks)
         pygame.quit()
 
-
+# Start Game
 if __name__ == '__main__':
     game = Game()
     game.run()

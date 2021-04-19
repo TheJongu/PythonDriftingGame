@@ -1,8 +1,13 @@
 import pygame as py
 import random
 
+"""
+
+"""
+
+
 class SkidMark:
-    """A SkidMark is a Circle with lines giving it texture, which represents a Tyre-Skidmark when the car drifts, breaks or Accelerates from Stand still
+    """A SkidMark is a Circle with lines giving it texture, which represents a Tyre-Skidmark when the car drifts, breaks or Accelerates from stand still
     
     """
     # Variables
