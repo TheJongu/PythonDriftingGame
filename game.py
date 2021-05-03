@@ -16,7 +16,7 @@ from car import Car
 from skidmark import SkidMark
 
 class Game:
-    """
+    """ The Game Class, of which the object handles all the basic of the game
         
     """
 
