@@ -18,12 +18,16 @@ class SkidMark:
         self.Alpha = anAlpha
         self.TimeToLive = 255.0
         self.CarSpeed = aSpeed
-        self.BLACK = (0 , 0 , 0)  
-        self.GREEN = (70, 70 , 70)
+        self.BLACK = (0 , 0 , 0)
+
+         
+        self.color = abs(127 - abs(anAlpha * anAlpha *  30))
+        
+        self.GREEN = (self.color,self.color,self.color)
         self.TEXTURE = (60 , 60 , 60)
         random.randint(45,65)
         # define a surface (RECTANGLE)  
-        self.TimeToLive = abs(anAlpha * 120)
+        self.TimeToLive = abs(255)
         self.image_orig = py.Surface((8 , 8))  
         #self.image_orig.fill((180,20,20))
         # for making transparent background while rotating an image  

@@ -259,12 +259,13 @@ class Car:
 
         self.calcWheelPositions(dt)
 
-        theOffsetAngle = degrees(self.direction) + 90 
-        if degrees(self.direction) > 90:
-            theOffsetAngle -= 360
+        if abs(self.steerAngle) > 0.8:
+            theOffsetAngle = degrees(self.direction) + 90 
+            if degrees(self.direction) > 90:
+                theOffsetAngle -= 360
 
-        theOffsetVectorRR = Vector2(cos(radians(theOffsetAngle)), sin(radians(theOffsetAngle))) * 5
+            theOffsetVectorRR = Vector2(cos(radians(theOffsetAngle)), sin(radians(theOffsetAngle))) * 5
 
-        self.skidMarkList.append(SkidMark((self.displayPos1.x + theOffsetVectorRR.x, self.displayPos1.y + theOffsetVectorRR.y),degrees(-self.direction), self.steerAngle, self.speed))
-        self.skidMarkList.append(SkidMark((self.displayPos1.x - theOffsetVectorRR.x, self.displayPos1.y - theOffsetVectorRR.y),degrees(-self.direction), self.steerAngle, self.speed))
+            self.skidMarkList.append(SkidMark((self.displayPos1.x + theOffsetVectorRR.x, self.displayPos1.y + theOffsetVectorRR.y),degrees(-self.direction), self.steerAngle, self.speed))
+            self.skidMarkList.append(SkidMark((self.displayPos1.x - theOffsetVectorRR.x, self.displayPos1.y - theOffsetVectorRR.y),degrees(-self.direction), self.steerAngle, self.speed))
            

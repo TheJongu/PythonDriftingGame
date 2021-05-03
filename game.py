@@ -47,7 +47,7 @@ class Game:
         image_path = os.path.join(current_dir, "car.png")
         car_image = pygame.image.load(image_path)
         car_image = pygame.transform.scale(car_image, (48,24))
-        track01_image = pygame.image.load("track_02.jpg")
+        track01_image = pygame.image.load("track_01.jpg")
         track01_image = pygame.transform.scale(track01_image,(1600,900))
         car = Car(200, 100, 300, -100, 20, 800)
         
@@ -83,11 +83,6 @@ class Game:
             #pygame.draw.circle(self.screen, (255,0,255), car.displayPos2, 15, 10)
             #pygame.draw.circle(self.screen, (0,255,255), car.displayPos3, 15, 10)
             
-
-
-
-            pygame.draw.circle(self.screen, self.theCircleColor, (400, 450), 15, 10)
-            pygame.draw.circle(self.screen, self.theCircleColor, (1200, 450 ), 15, 10)
 
             textsurfaceVector = self.myfont.render("self.steerAngle: " + str(car.steerAngle), False, (0, 0, 0))
             self.screen.blit(textsurfaceVector,(0,30))
