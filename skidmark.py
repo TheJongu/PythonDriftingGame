@@ -19,23 +19,24 @@ class SkidMark:
         self.TimeToLive = 255.0
         self.CarSpeed = aSpeed
         self.BLACK = (0 , 0 , 0)  
-        self.GREEN = (70 , 70 , 70)
+        self.GREEN = (70, 70 , 70)
         self.TEXTURE = (60 , 60 , 60)
         random.randint(45,65)
         # define a surface (RECTANGLE)  
-        self.image_orig = py.Surface((16 , 16))  
+        self.TimeToLive = abs(anAlpha * 120)
+        self.image_orig = py.Surface((8 , 8))  
+        #self.image_orig.fill((180,20,20))
         # for making transparent background while rotating an image  
         #self.image_orig.fill( self.GREEN)
         self.image_orig.set_colorkey(self.BLACK)  
-        self.image_orig.set_alpha(255)
-        py.draw.circle(self.image_orig, self.GREEN, (8,8), 8, 10)
-        theColor = random.randint(45,65)
-        py.draw.line(self.image_orig,(theColor,theColor,theColor),(random.randint(4,12),random.randint(4,12)),(random.randint(4,12),random.randint(4,12)))
-        theColor = random.randint(45,65)
-        py.draw.line(self.image_orig,(theColor,theColor,theColor),(random.randint(4,12),random.randint(4,12)),(random.randint(4,12),random.randint(4,12)))
-        theColor = random.randint(45,65)
-        py.draw.line(self.image_orig,(theColor,theColor,theColor),(random.randint(4,12),random.randint(4,12)),(random.randint(4,12),random.randint(4,12)))
-        theColor = random.randint(45,65)
+        py.draw.circle(self.image_orig, self.GREEN, (4,4), 4, 10)
+        #theColor = random.randint(45,65)
+        #py.draw.line(self.image_orig,(theColor,theColor,theColor),(random.randint(4,12),random.randint(4,12)),(random.randint(4,12),random.randint(4,12)))
+        #theColor = random.randint(45,65)
+        #py.draw.line(self.image_orig,(theColor,theColor,theColor),(random.randint(4,12),random.randint(4,12)),(random.randint(4,12),random.randint(4,12)))
+        #theColor = random.randint(45,65)
+        #py.draw.line(self.image_orig,(theColor,theColor,theColor),(random.randint(4,12),random.randint(4,12)),(random.randint(4,12),random.randint(4,12)))
+        #theColor = random.randint(45,65)
 
         # fill the rectangle / surface with green color  
         #self.image_orig.fill(self.GREEN)  
@@ -56,6 +57,7 @@ class SkidMark:
         self.rot = self.Rotation  
         # rotating the orignal image  
         self.new_image = py.transform.rotate(self.image_orig , self.rot)  
+        self.image_orig.set_alpha(10)
         self.rect = self.new_image.get_rect()
 
 

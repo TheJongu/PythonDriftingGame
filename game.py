@@ -46,9 +46,11 @@ class Game:
         current_dir = os.path.dirname(os.path.abspath(__file__))
         image_path = os.path.join(current_dir, "car.png")
         car_image = pygame.image.load(image_path)
-        car = Car(200, 400)
-        ppu = 32
-
+        car_image = pygame.transform.scale(car_image, (48,24))
+        track01_image = pygame.image.load("track_02.jpg")
+        track01_image = pygame.transform.scale(track01_image,(1600,900))
+        car = Car(200, 100, 300, -100, 20, 800)
+        
         while not self.exit:
             dt = self.clock.get_time() / 1000
 
@@ -64,15 +66,30 @@ class Game:
             # Camera https://www.youtube.com/watch?v=3zV2ewk-IGU
             # Drawing
             self.screen.fill((100, 100, 100))
+            self.screen.blit(track01_image, (0,0))
             car.drawSkidMarks(self.screen)
             rotated = pygame.transform.rotate(car_image, degrees(-car.direction))
             rect = rotated.get_rect()
-            self.screen.blit(rotated, car.displayPos2 - (rect.width / 2, rect.height / 2))
+
+
+
+            self.screen.blit(rotated, car.displayPngPosition - (rect.width / 2, rect.height / 2))
             
+
+            #pygame.draw.circle(self.screen, (255,0,0), car.position, 15, 10)
+            #pygame.draw.circle(self.screen, (0,255,0), car.frontWheel, 15, 10)
+            #pygame.draw.circle(self.screen, (0,0,255), car.turningWheel, 15, 10)
+            #pygame.draw.circle(self.screen, (255,255,0), car.displayPos1, 15, 10)
+            #pygame.draw.circle(self.screen, (255,0,255), car.displayPos2, 15, 10)
+            #pygame.draw.circle(self.screen, (0,255,255), car.displayPos3, 15, 10)
+            
+
+
+
             pygame.draw.circle(self.screen, self.theCircleColor, (400, 450), 15, 10)
             pygame.draw.circle(self.screen, self.theCircleColor, (1200, 450 ), 15, 10)
 
-            textsurfaceVector = self.myfont.render("Carspeed: " + str(car.speed), False, (0, 0, 0))
+            textsurfaceVector = self.myfont.render("self.steerAngle: " + str(car.steerAngle), False, (0, 0, 0))
             self.screen.blit(textsurfaceVector,(0,30))
 
             pygame.display.flip()

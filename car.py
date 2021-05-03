@@ -42,6 +42,9 @@ class Car:
         self.displayPos2 = Vector2(0, 0)
         self.displayPos3 = Vector2(0, 0)
         self.displayPos4 =  Vector2(0, 0)
+        self.displayPngPosition = Vector2(0,0)
+        self.pngOffset = -5
+
 
         self.direction = 0
         self.wheelBase = 0
@@ -88,6 +91,9 @@ class Car:
         
         if aPressedKey[pygame.K_j]:
             self.position = (200,200)
+
+        if aPressedKey[pygame.K_a]: self.pngOffset += 1
+        if aPressedKey[pygame.K_d]: self.pngOffset -= 1
         
         
 
@@ -245,21 +251,20 @@ class Car:
 
         self.displayPosFront = self.position + 70 * Vector2( cos(self.direction) , sin(self.direction))
         self.displayPosBack = self.position + 20 * Vector2( cos(self.direction) , sin(self.direction))
-        self.displayPos1 = self.position + 30 * Vector2( cos(self.direction) , sin(self.direction))
+        self.displayPos1 = self.position - 15 * Vector2( cos(self.direction) , sin(self.direction))
         self.displayPos2 = self.position + 40 * Vector2( cos(self.direction) , sin(self.direction))
         self.displayPos3 = self.position + 50 * Vector2( cos(self.direction) , sin(self.direction))
         self.displayPos4 = self.position + 60 * Vector2( cos(self.direction) , sin(self.direction))
+        self.displayPngPosition = self.position + self.pngOffset * Vector2( cos(self.direction) , sin(self.direction))
 
         self.calcWheelPositions(dt)
 
-        if abs(self.steerAngle) > 1:
+        theOffsetAngle = degrees(self.direction) + 90 
+        if degrees(self.direction) > 90:
+            theOffsetAngle -= 360
 
-            theOffsetAngle = degrees(self.direction) + 90 
-            if degrees(self.direction) > 90:
-                theOffsetAngle -= 360
+        theOffsetVectorRR = Vector2(cos(radians(theOffsetAngle)), sin(radians(theOffsetAngle))) * 5
 
-            theOffsetVectorRR = Vector2(cos(radians(theOffsetAngle)), sin(radians(theOffsetAngle))) * 18
-
-            self.skidMarkList.append(SkidMark((self.position.x + theOffsetVectorRR.x, self.position.y + theOffsetVectorRR.y),degrees(-self.direction), 250, self.speed))
-            self.skidMarkList.append(SkidMark((self.position.x - theOffsetVectorRR.x, self.position.y - theOffsetVectorRR.y),degrees(-self.direction), 150, self.speed))
+        self.skidMarkList.append(SkidMark((self.displayPos1.x + theOffsetVectorRR.x, self.displayPos1.y + theOffsetVectorRR.y),degrees(-self.direction), self.steerAngle, self.speed))
+        self.skidMarkList.append(SkidMark((self.displayPos1.x - theOffsetVectorRR.x, self.displayPos1.y - theOffsetVectorRR.y),degrees(-self.direction), self.steerAngle, self.speed))
            
