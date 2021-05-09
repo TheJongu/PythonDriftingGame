@@ -216,7 +216,7 @@ class Car:
         for aSkidMark in self.skidMarkList:
             aSkidMark.update(aScreen,0)
 
-        if(len(self.skidMarkList) > 5000):
+        if(len(self.skidMarkList) > 10000):
             del self.skidMarkList[:2]
 
     def calcWheelPositions(self, dt):

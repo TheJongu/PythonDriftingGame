@@ -70,7 +70,7 @@ class SkidMark:
 
         # set the rotated rectangle to the old center  
         self.rect.center = self.old_center  
-        self.TimeToLive -= .2
+        self.TimeToLive -= .1
         if(self.TimeToLive < 0): self.TimeToLive = 0
         self.new_image.set_alpha(int(self.TimeToLive))
         
