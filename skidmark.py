@@ -70,8 +70,10 @@ class SkidMark:
 
         # set the rotated rectangle to the old center  
         self.rect.center = self.old_center  
-        self.new_image.set_alpha(self.TimeToLive)
-        self.TimeToLive -= 1
+        self.TimeToLive -= .2
+        if(self.TimeToLive < 0): self.TimeToLive = 0
+        self.new_image.set_alpha(int(self.TimeToLive))
+        
         # drawing the rotated rectangle to the screen  
         #py.draw.circle(screen, self.GREEN, self.PositionTuple, 8, 10)
         screen.blit(self.new_image , self.rect)

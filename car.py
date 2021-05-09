@@ -122,11 +122,11 @@ class Car:
 
         self.speed -= 8
         if(self.speed < self.MAXBACKSPEED): self.speed = self.MAXBACKSPEED
-        self.updateSkidmarkOffsetVector()
-        self.skidMarkList.append(SkidMark((self.displayPos1.x + self.skidmarkOffsetVector.x, self.displayPos1.y + self.skidmarkOffsetVector.y),degrees(-self.direction), 2, self.speed))
-        self.skidMarkList.append(SkidMark((self.displayPos1.x - self.skidmarkOffsetVector.x, self.displayPos1.y - self.skidmarkOffsetVector.y),degrees(-self.direction), 2, self.speed))
-            
-
+        # Draw breaking skidmarks
+        if(self.speed > 0):
+            self.updateSkidmarkOffsetVector()
+            self.skidMarkList.append(SkidMark((self.displayPos1.x + self.skidmarkOffsetVector.x, self.displayPos1.y + self.skidmarkOffsetVector.y),degrees(-self.direction), 2, self.speed))
+            self.skidMarkList.append(SkidMark((self.displayPos1.x - self.skidmarkOffsetVector.x, self.displayPos1.y - self.skidmarkOffsetVector.y),degrees(-self.direction), 2, self.speed))
     
     def friction(self):
         """Applies driving-directional friction the car every updatetick to slow the car down over time.
@@ -216,7 +216,7 @@ class Car:
         for aSkidMark in self.skidMarkList:
             aSkidMark.update(aScreen,0)
 
-        if(len(self.skidMarkList) > 1000):
+        if(len(self.skidMarkList) > 5000):
             del self.skidMarkList[:2]
 
     def calcWheelPositions(self, dt):

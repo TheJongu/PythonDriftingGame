@@ -84,7 +84,7 @@ class Game:
             #pygame.draw.circle(self.screen, (0,255,255), car.displayPos3, 15, 10)
             
 
-            textsurfaceVector = self.myfont.render("self.steerAngle: " + str(car.steerAngle), False, (0, 0, 0))
+            textsurfaceVector = self.myfont.render("self.steerAngle: " + str(len(car.skidMarkList)), False, (0, 0, 0))
             self.screen.blit(textsurfaceVector,(0,30))
 
             pygame.display.flip()
