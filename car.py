@@ -43,6 +43,7 @@ class Car:
         self.displayPos3 = Vector2(0, 0)
         self.displayPos4 =  Vector2(0, 0)
         self.displayPngPosition = Vector2(0,0)
+        self.skidmarkOffsetVector = Vector2(0,0)
         self.pngOffset = -5
 
 
@@ -121,6 +122,11 @@ class Car:
 
         self.speed -= 8
         if(self.speed < self.MAXBACKSPEED): self.speed = self.MAXBACKSPEED
+        self.updateSkidmarkOffsetVector()
+        self.skidMarkList.append(SkidMark((self.displayPos1.x + self.skidmarkOffsetVector.x, self.displayPos1.y + self.skidmarkOffsetVector.y),degrees(-self.direction), 2, self.speed))
+        self.skidMarkList.append(SkidMark((self.displayPos1.x - self.skidmarkOffsetVector.x, self.displayPos1.y - self.skidmarkOffsetVector.y),degrees(-self.direction), 2, self.speed))
+            
+
     
     def friction(self):
         """Applies driving-directional friction the car every updatetick to slow the car down over time.
@@ -258,14 +264,42 @@ class Car:
         self.displayPngPosition = self.position + self.pngOffset * Vector2( cos(self.direction) , sin(self.direction))
 
         self.calcWheelPositions(dt)
+        self.calculateSkidMarks()
+    
+    def updateSkidmarkOffsetVector(self):
+        """ Updates the skidmarkOffsetVector with the current direction
+        Args:
+            self: self
 
+        Tests:
+            * Is the skidmarkVector at the correct position for the skidmarks?
+            * Is the circle overflow correctly calculated?
+
+        """
+
+        theOffsetAngle = degrees(self.direction) + 90 
+        if degrees(self.direction) > 90:
+            theOffsetAngle -= 360
+
+        self.skidmarkOffsetVector = Vector2(cos(radians(theOffsetAngle)), sin(radians(theOffsetAngle))) * 5
+
+    def calculateSkidMarks(self):
+        """ Calculates the need of SkidMarks based of steeringAngle and car speed.
+
+        Args: 
+            self: self
+
+        Tests:
+            * Are the Skidmarks the correct color?
+            * Are the Skidmarks on the correct Position?
+            * Are the Skidmarks drawn on the correct layer? (Under the car, over the bg?)
+        """
+        self.updateSkidmarkOffsetVector()
         if abs(self.steerAngle) > 0.8:
-            theOffsetAngle = degrees(self.direction) + 90 
-            if degrees(self.direction) > 90:
-                theOffsetAngle -= 360
 
-            theOffsetVectorRR = Vector2(cos(radians(theOffsetAngle)), sin(radians(theOffsetAngle))) * 5
-
-            self.skidMarkList.append(SkidMark((self.displayPos1.x + theOffsetVectorRR.x, self.displayPos1.y + theOffsetVectorRR.y),degrees(-self.direction), self.steerAngle, self.speed))
-            self.skidMarkList.append(SkidMark((self.displayPos1.x - theOffsetVectorRR.x, self.displayPos1.y - theOffsetVectorRR.y),degrees(-self.direction), self.steerAngle, self.speed))
-           
+            self.skidMarkList.append(SkidMark((self.displayPos1.x + self.skidmarkOffsetVector.x, self.displayPos1.y + self.skidmarkOffsetVector.y),degrees(-self.direction), self.steerAngle, self.speed))
+            self.skidMarkList.append(SkidMark((self.displayPos1.x - self.skidmarkOffsetVector.x, self.displayPos1.y - self.skidmarkOffsetVector.y),degrees(-self.direction), self.steerAngle, self.speed))
+        if  0 < self.speed < 100:
+            self.skidMarkList.append(SkidMark((self.displayPos1.x + self.skidmarkOffsetVector.x, self.displayPos1.y + self.skidmarkOffsetVector.y),degrees(-self.direction), 2, self.speed))
+            self.skidMarkList.append(SkidMark((self.displayPos1.x - self.skidmarkOffsetVector.x, self.displayPos1.y - self.skidmarkOffsetVector.y),degrees(-self.direction), 2, self.speed))
+             

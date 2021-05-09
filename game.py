@@ -47,7 +47,7 @@ class Game:
         image_path = os.path.join(current_dir, "car.png")
         car_image = pygame.image.load(image_path)
         car_image = pygame.transform.scale(car_image, (48,24))
-        track01_image = pygame.image.load("track_01.jpg")
+        track01_image = pygame.image.load("track_02.jpg")
         track01_image = pygame.transform.scale(track01_image,(1600,900))
         car = Car(200, 100, 300, -100, 20, 800)
         
