@@ -1,6 +1,4 @@
 """
-
-
     author: JONAS GUGEL
     data: 19.03.2021
     licence: free
@@ -36,7 +34,7 @@ class Car:
         self.MAXBACKSPEED = aBackSpeed
         self.MINWHEELBASE = aMinWheelbase
         self.MAXWHEELBASE = aMaxWheelbase
-
+        self.MAXSKIDMARKS = 5000
         self.position = Vector2(x, y)
 
         self.turningWheel = Vector2(0, 0)
@@ -72,9 +70,9 @@ class Car:
             * Two keys pressed: Both get processed
         """
 
-        if aPressedKey[pygame.K_UP]:
+        if aPressedKey[pygame.K_UP] or aPressedKey[pygame.K_w] or aPressedKey[pygame.K_c]:
             self.accelerate()
-        elif aPressedKey[pygame.K_DOWN]:
+        elif aPressedKey[pygame.K_DOWN] or aPressedKey[pygame.K_s] or aPressedKey[pygame.K_x]:
             self.decelerate()
         else:
             self.friction()
@@ -90,16 +88,14 @@ class Car:
 
         if abs(self.speed) < 10: self.steerAngle = 0
 
-        if aPressedKey[pygame.K_RIGHT]:
+        if aPressedKey[pygame.K_RIGHT] or aPressedKey[pygame.K_d] or aPressedKey[pygame.K_m]:
             self.steerRight()
-        elif aPressedKey[pygame.K_LEFT]:
+        elif aPressedKey[pygame.K_LEFT] or aPressedKey[pygame.K_a] or aPressedKey[pygame.K_n]:
             self.steerLeft()
-        
-        if aPressedKey[pygame.K_j]:
-            self.position = (200,200)
 
-        if aPressedKey[pygame.K_a]: self.pngOffset += 1
-        if aPressedKey[pygame.K_d]: self.pngOffset -= 1
+        # reset
+        if aPressedKey[pygame.K_r]:
+            self.position = (200,200)
         
         
 
@@ -221,7 +217,7 @@ class Car:
         for aSkidMark in self.skidMarkList:
             aSkidMark.update(aScreen,0)
 
-        if(len(self.skidMarkList) > 10000):
+        if(len(self.skidMarkList) > self.MAXSKIDMARKS):
             del self.skidMarkList[:2]
 
     def calcWheelPositions(self, dt):
