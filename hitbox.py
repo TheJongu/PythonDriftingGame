@@ -14,11 +14,13 @@ class Hitbox:
     """
     # Variables
 
-    def __init__(self, aPositionTuple1: Vector2, aPositionTuple2: Vector2, aMaxspeed = 100):
+    def __init__(self, aPositionTuple1: Vector2, aPositionTuple2: Vector2, aMaxspeed = 100, aSlowdownFlag = True, aCheckpointFlag = False):
         self.position1 = Vector2(aPositionTuple1)
         self.position2 = Vector2(aPositionTuple2)
         self.dimensions = Vector2(abs(self.position1.x - self.position2.x),abs(self.position1.y - self.position2.y))
         self.maxSpeed = aMaxspeed
+        self.slowdownFlag = aSlowdownFlag
+        self.checkpointFlag = aCheckpointFlag
 
     def checkIfPointIsInside(self, aPosition: Vector2): 
         """Returns a boolean if the given point is inside the Hitbox
@@ -48,8 +50,8 @@ class Hitbox:
             * Is the position correct?
         """
         if self.checkIfPointIsInside(carposition):
-            py.draw.rect(aScreen, (255, 0, 0), (self.position1, self.dimensions),1)
+            py.draw.rect(aScreen, (255, 0, 0), (self.position1, self.dimensions),5)
         else:
-            py.draw.rect(aScreen, (0, 255,0), (self.position1, self.dimensions),1)
+            py.draw.rect(aScreen, (0, 255,0), (self.position1, self.dimensions),5)
 
         

@@ -70,11 +70,16 @@ class Car:
             * Key not relavent to the car: Nothing happens
             * Two keys pressed: Both get processed
         """
+        # (Re-)Set MaxFrontSpeed into currentFrontSpeed for this run of the process input
+        # If the car goes over Hitboxes, this currentFrontSpeed will be set lower or higher 
+        self.currentFrontSpeed = self.MAXFRONTSPEED
 
         if aPressedKey[pygame.K_UP] or aPressedKey[pygame.K_w] or aPressedKey[pygame.K_c]:
             self.accelerate()
         elif aPressedKey[pygame.K_DOWN] or aPressedKey[pygame.K_s] or aPressedKey[pygame.K_x]:
             self.decelerate()
+        
+        self.calculateHitboxes()
         self.friction()
 
         theDeceleration = 0
@@ -100,7 +105,7 @@ class Car:
         if aPressedKey[pygame.K_r]:
             self.position = (200,200)
         
-        self.calculateHitboxes()
+        
 
         # Move the car
         self.update(aDelta)
@@ -139,11 +144,13 @@ class Car:
             * Car is getting slowed down over time when not accelerating/decelerating
         """
         deceleration = 3
-        if(self.speed > self.MAXFRONTSPEED * 1.5): deceleration = 15
+        if(self.speed > self.currentFrontSpeed * 1.5): deceleration = 25
+        if(self.speed > self.currentFrontSpeed * 1.75): deceleration = 50
+        if(self.speed > self.currentFrontSpeed * 2): deceleration = 100
         
         if self.speed > 0: self.speed -= deceleration
         else: self.speed += deceleration
-        if abs(self.speed < 5): self.speed = 0
+        if abs(self.speed) < 5: self.speed = 0
 
     def steerRight(self):
         """Steers the car right with a set turningangle every updatetick.
@@ -196,14 +203,16 @@ class Car:
         Tests:
             * The Wheelbase of the car can not be smaller/bigger then the defined MINWHEELBASE/MAXWHEELBASE of the car
             * The calculation is correct
-        """
-
+        """       
         self.wheelBase = abs(self.speed)/2
+        
         if(self.wheelBase < self.MINWHEELBASE):
             self.wheelBase = self.MINWHEELBASE
         if(self.wheelBase > self.MAXWHEELBASE):
             self.wheelBase = self.MAXWHEELBASE
-        
+
+    
+
     def drawSkidMarks(self, aScreen):  
         """ Draws the skidmarks of the car.
         TODO: Skidmarks are to be reworked: 
@@ -222,6 +231,16 @@ class Car:
 
         if(len(self.skidMarkList) > self.MAXSKIDMARKS):
             del self.skidMarkList[:2]
+    
+    def calculateHitboxes(self):
+    
+        for hitbox in self.hitboxList:            
+            if hitbox.checkIfPointIsInside(self.position):
+                if hitbox.slowdownFlag:
+                    self.currentFrontSpeed = hitbox.maxSpeed
+                else:
+                   self.speed += hitbox.maxSpeed
+              
 
     def calcWheelPositions(self, dt):
         """Calucates the wheelPosition of the Car. 
@@ -239,14 +258,25 @@ class Car:
             * Are the wheels correctly positioned?
             * Does the car not exceed the max speed?
         """
-        self.turningWheel = self.position - self.wheelBase/2 * Vector2( cos(self.direction) , sin(self.direction))
-        self.frontWheel = self.position + self.wheelBase/2 * Vector2( cos(self.direction) , sin(self.direction))  
 
-        self.frontWheel += self.speed * dt * Vector2(cos(self.direction) , sin(self.direction))
-        self.turningWheel += self.speed * dt * Vector2(cos(self.direction+self.steerAngle) , sin(self.direction+self.steerAngle))
+        if(self.speed > 0):
+            self.turningWheel = self.position - self.wheelBase/2 * Vector2( cos(self.direction) , sin(self.direction))
+            self.frontWheel = self.position + self.wheelBase/2 * Vector2( cos(self.direction) , sin(self.direction))  
 
-        self.position = (self.turningWheel + self.frontWheel) / 2
-        self.direction = atan2( self.frontWheel.y - self.turningWheel.y , self.frontWheel.x - self.turningWheel.x )
+            self.frontWheel += self.speed * dt * Vector2(cos(self.direction) , sin(self.direction))
+            self.turningWheel += self.speed * dt * Vector2(cos(self.direction+self.steerAngle) , sin(self.direction+self.steerAngle))
+
+            self.position = (self.turningWheel + self.frontWheel) / 2
+            self.direction = atan2( self.frontWheel.y - self.turningWheel.y , self.frontWheel.x - self.turningWheel.x )
+        else: 
+            self.turningWheel = self.position - self.wheelBase/2 * Vector2( cos(self.direction) , sin(self.direction))
+            self.frontWheel = self.position + self.wheelBase/2 * Vector2( cos(self.direction) , sin(self.direction))  
+
+            self.turningWheel += self.speed * dt * Vector2(cos(self.direction) , sin(self.direction))
+            self.frontWheel += self.speed * dt * Vector2(cos(self.direction+self.steerAngle) , sin(self.direction+self.steerAngle))
+
+            self.position = (self.turningWheel + self.frontWheel) / 2
+            self.direction = atan2( self.frontWheel.y - self.turningWheel.y , self.frontWheel.x - self.turningWheel.x )
 
     def update(self, dt):
         """ Updates the cars physics and position
@@ -280,7 +310,6 @@ class Car:
             * Is the circle overflow correctly calculated?
 
         """
-
         theOffsetAngle = degrees(self.direction) + 90 
         if degrees(self.direction) > 90:
             theOffsetAngle -= 360
@@ -299,7 +328,7 @@ class Car:
             * Are the Skidmarks drawn on the correct layer? (Under the car, over the bg?)
         """
         self.updateSkidmarkOffsetVector()
-        if abs(self.steerAngle) > 0.8:
+        if abs(self.steerAngle) > 0.8 and self.speed > 0:
 
             self.skidMarkList.append(SkidMark((self.displayPos1.x + self.skidmarkOffsetVector.x, self.displayPos1.y + self.skidmarkOffsetVector.y),degrees(-self.direction), self.steerAngle, self.speed))
             self.skidMarkList.append(SkidMark((self.displayPos1.x - self.skidmarkOffsetVector.x, self.displayPos1.y - self.skidmarkOffsetVector.y),degrees(-self.direction), self.steerAngle, self.speed))
@@ -307,7 +336,7 @@ class Car:
             self.skidMarkList.append(SkidMark((self.displayPos1.x + self.skidmarkOffsetVector.x, self.displayPos1.y + self.skidmarkOffsetVector.y),degrees(-self.direction), 2, self.speed))
             self.skidMarkList.append(SkidMark((self.displayPos1.x - self.skidmarkOffsetVector.x, self.displayPos1.y - self.skidmarkOffsetVector.y),degrees(-self.direction), 2, self.speed))
              
-    def calculateHitboxes(self):
-        print("")
-        #for eachHitbox in self.hitboxList
-        #    if eachHitbox.
+                  
+
+
+
