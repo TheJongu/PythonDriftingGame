@@ -7,6 +7,7 @@
 """
 import pygame as py
 from pygame import Vector2
+from hitbox import Hitbox
 
 class Trackdata:
     """A Object which holds all the information about the tracks available in the game.
@@ -20,7 +21,9 @@ class Trackdata:
         """Inits trackdata and creates all the hitboxes for the tracks
         """
         self.track01 = []
-        
+
+        self.track01.__add__(Hitbox())
+
 
 
 

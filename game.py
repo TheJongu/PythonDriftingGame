@@ -76,8 +76,8 @@ class Game:
             # Drawing
             self.screen.fill((100, 100, 100))
             self.screen.blit(track01_image, (0,0))
-            car.drawSkidMarks(self.screen)
             rotated = pygame.transform.rotate(car_image, degrees(-car.direction))
+            car.drawSkidMarks(self.screen)
             rect = rotated.get_rect()
 
 
@@ -94,7 +94,7 @@ class Game:
             
             self.tempHitbox.drawDebugHitbox(self.screen, car.position)
 
-            textsurfaceVector = self.myfont.render("self.steerAngle: " + str(car.position), False, (0, 0, 0))
+            textsurfaceVector = self.myfont.render("CarSpeed: " + str(car.speed), False, (0, 0, 0))
             self.screen.blit(textsurfaceVector,(0,30))
             
 

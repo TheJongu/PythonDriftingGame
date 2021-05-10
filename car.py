@@ -10,6 +10,7 @@ import random
 from math import sin, cos, tan,atan2, radians, degrees, copysign
 from pygame import Vector2
 from skidmark import SkidMark
+from hitbox import Hitbox
 
 class Car:
     """A class to represent the driving car on screen with the necessary calculations to simulate the driving physics.
@@ -74,8 +75,7 @@ class Car:
             self.accelerate()
         elif aPressedKey[pygame.K_DOWN] or aPressedKey[pygame.K_s] or aPressedKey[pygame.K_x]:
             self.decelerate()
-        else:
-            self.friction()
+        self.friction()
 
         theDeceleration = 0
         if abs(self.steerAngle) > 1.6: theDeceleration += 5 
@@ -93,11 +93,14 @@ class Car:
         elif aPressedKey[pygame.K_LEFT] or aPressedKey[pygame.K_a] or aPressedKey[pygame.K_n]:
             self.steerLeft()
 
+        if aPressedKey[pygame.K_SPACE]:
+            self.speed = self.speed + 20
+
         # reset
         if aPressedKey[pygame.K_r]:
             self.position = (200,200)
         
-        
+        self.calculateHitboxes()
 
         # Move the car
         self.update(aDelta)
@@ -110,8 +113,7 @@ class Car:
             * Car does not "Jump" to positive speed when acc while driving backwards
         """
         
-        self.speed += 3
-        if(self.speed > self.MAXFRONTSPEED): self.speed = self.MAXFRONTSPEED
+        if(self.speed < self.MAXFRONTSPEED): self.speed += 8
     
     def decelerate(self):
         """Decelerates the car with a set speed every updatetick.
@@ -136,11 +138,12 @@ class Car:
             * Car can not be faster then the MAXBACKSPEED
             * Car is getting slowed down over time when not accelerating/decelerating
         """
-
-        theDeceleration = 5
-        if self.speed > 0: self.speed -= theDeceleration
-        else: self.speed += theDeceleration
-        if abs(self.speed < 20): self.speed = 0
+        deceleration = 3
+        if(self.speed > self.MAXFRONTSPEED * 1.5): deceleration = 15
+        
+        if self.speed > 0: self.speed -= deceleration
+        else: self.speed += deceleration
+        if abs(self.speed < 5): self.speed = 0
 
     def steerRight(self):
         """Steers the car right with a set turningangle every updatetick.
@@ -265,6 +268,7 @@ class Car:
 
         self.calcWheelPositions(dt)
         self.calculateSkidMarks()
+        
     
     def updateSkidmarkOffsetVector(self):
         """ Updates the skidmarkOffsetVector with the current direction
@@ -303,3 +307,7 @@ class Car:
             self.skidMarkList.append(SkidMark((self.displayPos1.x + self.skidmarkOffsetVector.x, self.displayPos1.y + self.skidmarkOffsetVector.y),degrees(-self.direction), 2, self.speed))
             self.skidMarkList.append(SkidMark((self.displayPos1.x - self.skidmarkOffsetVector.x, self.displayPos1.y - self.skidmarkOffsetVector.y),degrees(-self.direction), 2, self.speed))
              
+    def calculateHitboxes(self):
+        print("")
+        #for eachHitbox in self.hitboxList
+        #    if eachHitbox.
