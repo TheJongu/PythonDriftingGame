@@ -18,6 +18,7 @@ pygame.font.init()
 
 from car import Car
 from skidmark import SkidMark
+from hitbox import Hitbox
 
 
 
@@ -38,6 +39,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.ticks = 60
         self.exit = False
+        self.tempHitbox = Hitbox((400,400), (800,800))
         
 
 
@@ -83,16 +85,20 @@ class Game:
             self.screen.blit(rotated, car.displayPngPosition - (rect.width / 2, rect.height / 2))
             
 
-            #pygame.draw.circle(self.screen, (255,0,0), car.position, 15, 10)
+            pygame.draw.circle(self.screen, (255,255,0), car.position, 15, 10)
             #pygame.draw.circle(self.screen, (0,255,0), car.frontWheel, 15, 10)
             #pygame.draw.circle(self.screen, (0,0,255), car.turningWheel, 15, 10)
             #pygame.draw.circle(self.screen, (255,255,0), car.displayPos1, 15, 10)
             #pygame.draw.circle(self.screen, (255,0,255), car.displayPos2, 15, 10)
             #pygame.draw.circle(self.screen, (0,255,255), car.displayPos3, 15, 10)
             
+            self.tempHitbox.drawDebugHitbox(self.screen, car.position)
 
-            textsurfaceVector = self.myfont.render("self.steerAngle: " + str(len(car.skidMarkList)), False, (0, 0, 0))
+            textsurfaceVector = self.myfont.render("self.steerAngle: " + str(car.position), False, (0, 0, 0))
             self.screen.blit(textsurfaceVector,(0,30))
+            
+
+
 
             pygame.display.flip()
 
