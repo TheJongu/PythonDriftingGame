@@ -16,7 +16,7 @@ class Car:
     """
 
 
-    def __init__(self, x, y, aMaxSpeed = 600, aBackSpeed = -100, aMinWheelbase = 50, aMaxWheelbase = 500):
+    def __init__(self, x, y, aMaxSpeed = 600, aBackSpeed = -100, aMinWheelbase = 50, aMaxWheelbase = 500, aHitboxList=[]):
         """Inits the car with parameters, which change the cars behaviour.
 
         Args:
@@ -48,7 +48,7 @@ class Car:
         self.displayPngPosition = Vector2(0,0)
         self.skidmarkOffsetVector = Vector2(0,0)
         self.pngOffset = -5
-
+        self.hitboxList = aHitboxList
 
         self.direction = 0
         self.wheelBase = 0

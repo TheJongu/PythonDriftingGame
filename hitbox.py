@@ -14,10 +14,11 @@ class Hitbox:
     """
     # Variables
 
-    def __init__(self, aPositionTuple1: Vector2, aPositionTuple2: Vector2):
-        self.Position1 = Vector2(aPositionTuple1)
-        self.Position2 = Vector2(aPositionTuple2)
-        self.Dimensions = Vector2(abs(self.Position1.x - self.Position2.x),abs(self.Position1.y - self.Position2.y))
+    def __init__(self, aPositionTuple1: Vector2, aPositionTuple2: Vector2, aMaxspeed = 100):
+        self.position1 = Vector2(aPositionTuple1)
+        self.position2 = Vector2(aPositionTuple2)
+        self.dimensions = Vector2(abs(self.position1.x - self.position2.x),abs(self.position1.y - self.position2.y))
+        self.maxSpeed = aMaxspeed
 
     def checkIfPointIsInside(self, aPosition: Vector2): 
         """Returns a boolean if the given point is inside the Hitbox
@@ -31,8 +32,8 @@ class Hitbox:
         Tests:
             * Is the position check correct?
         """
-        if(self.Position1.x < aPosition.x < self.Position2.x or self.Position2.x < aPosition.x < self.Position1.x):
-            if(self.Position1.y < aPosition.y < self.Position2.y or self.Position2.y < aPosition.y < self.Position1.y): return True
+        if(self.position1.x < aPosition.x < self.position2.x or self.position2.x < aPosition.x < self.position1.x):
+            if(self.position1.y < aPosition.y < self.position2.y or self.position2.y < aPosition.y < self.position1.y): return True
         return False
 
     def drawDebugHitbox(self, aScreen, carposition):
@@ -47,8 +48,8 @@ class Hitbox:
             * Is the position correct?
         """
         if self.checkIfPointIsInside(carposition):
-            py.draw.rect(aScreen, (255, 0, 0), (self.Position1, self.Dimensions),1)
+            py.draw.rect(aScreen, (255, 0, 0), (self.position1, self.dimensions),1)
         else:
-            py.draw.rect(aScreen, (0, 255,0), (self.Position1, self.Dimensions),1)
+            py.draw.rect(aScreen, (0, 255,0), (self.position1, self.dimensions),1)
 
         

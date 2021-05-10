@@ -24,7 +24,7 @@ class SkidMark:
         self.BLACK = (0 , 0 , 0)
 
          
-        self.color = abs(127 - abs(anAlpha * anAlpha *  30))
+        self.color = abs(77 - abs(anAlpha * anAlpha *  20))
         
         self.GREEN = (self.color,self.color,self.color)
         self.TEXTURE = (60 , 60 , 60)
