@@ -1,5 +1,10 @@
 """
 
+
+    author: JONAS GUGEL
+    data: 19.03.2021
+    licence: free
+
 """
 
 import pygame
@@ -224,6 +229,7 @@ class Car:
 
         The Code is based on the idea from:
         Source: http://engineeringdotnet.blogspot.com/2010/04/simple-2d-car-physics-in-games.html
+        Used on date: April 2021  
         This code has been taken and implemented. However his code works for "traditional driving physics". Meaning: Actual driving with frontwheel steering.
         This was not the scope of this project. So I majorly adjusted the codea and his basic idea, which allows me to simulate a drift.
 
@@ -242,8 +248,6 @@ class Car:
 
         self.position = (self.turningWheel + self.frontWheel) / 2
         self.direction = atan2( self.frontWheel.y - self.turningWheel.y , self.frontWheel.x - self.turningWheel.x )
-
-
 
     def update(self, dt):
         """ Updates the cars physics and position

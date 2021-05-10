@@ -2,10 +2,14 @@
 
 Runs a simple drifting game.
 
+    author: JONAS GUGEL
+    data: 19.03.2021
+    licence: free
+
 """
-
-
 import os
+# Hide pygame prompt
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 import pygame
 import random
 from math import sin, cos, tan,atan2, radians, degrees, copysign
@@ -14,6 +18,9 @@ pygame.font.init()
 
 from car import Car
 from skidmark import SkidMark
+
+
+
 
 class Game:
     """ The Game Class, of which the object handles all the basic of the game

@@ -1,9 +1,12 @@
+"""
+
+    author: JONAS GUGEL
+    data: 19.03.2021
+    licence: free
+
+"""
 import pygame as py
 import random
-
-"""
-
-"""
 
 
 class SkidMark:
