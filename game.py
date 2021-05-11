@@ -58,7 +58,7 @@ class Game:
         car_image = pygame.transform.scale(car_image, (48,24))
         track01_image = pygame.image.load("tracks/track_02.jpg")
         track01_image = pygame.transform.scale(track01_image,(1600,900))
-        car = Car(200, 100, 401, -100, 20, 800, [])#trackdata.track01_hitboxes)
+        car = Car(200, 100, 401, -100, 20, 800, trackdata.track02_hitboxes)
         lapManager = LapManager(trackdata.track02_checkpoints)
 
         
@@ -109,8 +109,8 @@ class Game:
             #for hitbox in trackdata.track01_hitboxes:        
             #    hitbox.drawDebugHitbox(self.screen, car.position)
 
-            for hitbox in trackdata.track02_checkpoints:        
-                hitbox.drawDebugHitbox(self.screen, car.position)
+           # for hitbox in trackdata.track01_checkpoints:        
+            #    hitbox.drawDebugHitbox(self.screen, car.position)
 
             pygame.display.flip()
 

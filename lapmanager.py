@@ -39,15 +39,23 @@ class LapManager:
             self.currentCheckpoint = self.checkpointList[self.checkpointsPassed]
                 # lap finished
     def drawCheckpointMarks(self, aScreen):
-        for checkpoint in self.checkpointList:
-            if checkpoint == self.currentCheckpoint:
-                py.draw.circle(aScreen, (0,255,0), checkpoint.position1, 15, 10)
-                
-            else: 
-                py.draw.circle(aScreen, (255,255,0), checkpoint.position1, 15, 10)
-            py.draw.circle(aScreen, (0,0,0), checkpoint.position1, 5, 2)
-            py.draw.circle(aScreen, (0,0,0), checkpoint.position1, 15, 2)
+        
+        for checkpoint in self.checkpointList:            
+            self.drawOneCheckpointMark(checkpoint, aScreen, (255,255,0))
+        self.drawOneCheckpointMark(self.currentCheckpoint, aScreen, (0,255,0))
             
+    def drawOneCheckpointMark(self, checkpoint, aScreen, aColor):
+        tmpVec = Vector2(0,0)
+        if checkpoint.dimensions.x < checkpoint.dimensions.y: tmpVec = (0,checkpoint.dimensions.y)
+        else: tmpVec = (checkpoint.dimensions.x, 0)
+        py.draw.circle(aScreen, aColor, checkpoint.position1, 15, 10)
+        py.draw.circle(aScreen, aColor, checkpoint.position1+tmpVec, 15, 10)
+            
+        py.draw.circle(aScreen, (0,0,0), checkpoint.position1, 5, 2)
+        py.draw.circle(aScreen, (0,0,0), checkpoint.position1, 15, 2)
+        py.draw.circle(aScreen, (0,0,0), checkpoint.position1+tmpVec, 5, 2)
+        py.draw.circle(aScreen, (0,0,0), checkpoint.position1+tmpVec, 15, 2)
+
 
     
     
