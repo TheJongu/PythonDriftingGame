@@ -22,26 +22,22 @@ from hitbox import Hitbox
 from trackdata import Trackdata
 from lapmanager import LapManager
 
-
-
-
 class Game:
     """ The Game Class, of which the object handles all the basic of the game
         
     """
 
     myfont = pygame.font.SysFont('Arial', 30, True)
-    def __init__(self):
-        pygame.init()
+    def __init__(self, aScreen, aCarType, aTrack):
+        #pygame.init()
         pygame.display.set_caption("Car Drifting Game")
-        width = 1600
-        height = 900
-        self.screen = pygame.display.set_mode((width, height))
+        self.screen = aScreen
         self.clock = pygame.time.Clock()
         self.ticks = 60
         self.exit = False
+        self.track = self.loadTrack(aTrack)
+        self.car = self.createCar(aCarType, aTrack)
         
-
 
     def run(self):
         """ Inits all the Runs the game
@@ -51,19 +47,14 @@ class Game:
                 * Does the game Stop if requested?
                 * Does the game run at the correct fps?
         """
-        trackdata = Trackdata()
         current_dir = os.path.dirname(os.path.abspath(__file__))
         image_path = os.path.join(current_dir, "car.png")
         car_image = pygame.image.load(image_path)
-        car_image = pygame.transform.scale(car_image, (48,24))
-        track01_image = pygame.image.load("tracks/track_02.jpg")
-        track01_image = pygame.transform.scale(track01_image,(1600,900))
-        car = Car(200, 100, 401, -100, 20, 800, trackdata.track02_hitboxes)
-        lapManager = LapManager(trackdata.track02_checkpoints)
+        car_image = pygame.transform.scale(car_image, (48,24))        
 
         
         while not self.exit:
-            lapManager.checkCheckpointPassed(car.position)
+            self.lapManager.checkCheckpointPassed(self.car.position)
             dt = self.clock.get_time() / 1000
 
             # Event queue
@@ -73,17 +64,19 @@ class Game:
 
             # User input
             pressed = pygame.key.get_pressed()
+            if pressed[pygame.K_ESCAPE]:
+                self.exit = True
 
-            car.processInputs(pressed, dt)
+            self.car.processInputs(pressed, dt)
             # Drawing
             self.screen.fill((100, 100, 100))
-            self.screen.blit(track01_image, (0,0))
-            lapManager.drawCheckpointMarks(self.screen)
-            rotated = pygame.transform.rotate(car_image, degrees(-car.direction))
-            car.drawSkidMarks(self.screen)
+            self.screen.blit(self.trackImage, (0,0))
+            self.lapManager.drawCheckpointMarks(self.screen)
+            rotated = pygame.transform.rotate(car_image, degrees(-self.car.direction))
+            self.car.drawSkidMarks(self.screen)
             rect = rotated.get_rect()
 
-            self.screen.blit(rotated, car.displayPngPosition - (rect.width / 2, rect.height / 2))
+            self.screen.blit(rotated, self.car.displayPngPosition - (rect.width / 2, rect.height / 2))
 
             #pygame.draw.circle(self.screen, (255,255,0), car.position, 15, 10)
             #pygame.draw.circle(self.screen, (0,255,0), car.frontWheel, 15, 10)
@@ -92,15 +85,15 @@ class Game:
             #pygame.draw.circle(self.screen, (255,0,255), car.displayPos2, 15, 10)
             #pygame.draw.circle(self.screen, (0,255,255), car.displayPos3, 15, 10)
             
-            speed = car.speed / 3
+            speed = self.car.speed / 3
             if 130 < speed < 137: speed = 130
             textsurfaceVector = self.myfont.render("CarSpeed: " + str(int(speed)), False, (0, 0, 0))
             self.screen.blit(textsurfaceVector,(190,25))
 
-            textsurfaceVector = self.myfont.render("Last Lap time: " + str(round(lapManager.lastLap, 3)), False, (0, 0, 0))
+            textsurfaceVector = self.myfont.render("Last Lap time: " + str(round(self.lapManager.lastLap, 3)), False, (0, 0, 0))
             self.screen.blit(textsurfaceVector,(440,25))
 
-            textsurfaceVector = self.myfont.render("Fastest Lap: " + str(round(lapManager.fastestLap, 3)), False, (0, 0, 0))
+            textsurfaceVector = self.myfont.render("Fastest Lap: " + str(round(self.lapManager.fastestLap, 3)), False, (0, 0, 0))
             self.screen.blit(textsurfaceVector,(780,25))
 
             #for hitbox in trackdata.track01_hitboxes:        
@@ -113,7 +106,35 @@ class Game:
             pygame.display.flip()
 
             self.clock.tick(self.ticks)
-        pygame.quit()
+
+    def loadTrack(self, aTrack):
+        """ Loads the track data into the object variables game
+
+        Args:
+            aTrack (int): 1 (easy) or 2 (expert)
+        """
+        self.trackdata = Trackdata()
+        if aTrack == 1:
+            self.trackImage = pygame.image.load("tracks/track_01.jpg")
+            self.trackImage = pygame.transform.scale(self.trackImage,(1600,900))
+            self.lapManager = LapManager(self.trackdata.track01_checkpoints)
+        else:
+
+            self.trackImage = pygame.image.load("tracks/track_02.jpg")
+            self.trackImage = pygame.transform.scale(self.trackImage,(1600,900))
+            self.lapManager = LapManager(self.trackdata.track02_checkpoints)
+
+    def createCar(self, aCarType, aTrack):
+        """ Creates a new car with the self.carType and self.track
+
+        Args:
+            aCarType (int): 1 (driftcar) or 2 (race car)
+        """
+        if aTrack == 1:
+            return Car(200, 100, 401, -100, 20, 800, self.trackdata.track01_hitboxes)
+        else:
+            return Car(200, 100, 401, -100, 20, 800, self.trackdata.track02_hitboxes)
+
 
 # Start Game
 if __name__ == '__main__':
