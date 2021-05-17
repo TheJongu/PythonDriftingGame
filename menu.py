@@ -6,7 +6,9 @@
     Source: https://pygame-menu.readthedocs.io/en/4.0.4/
 
 """
-
+import os
+# Hide pygame prompt
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 import pygame
 import pygame_menu
 from game import Game
