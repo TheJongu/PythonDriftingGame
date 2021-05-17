@@ -34,9 +34,7 @@ class Hitbox:
         Tests:
             * Is the position check correct?
         """
-        if(self.position1.x < aPosition.x < self.position2.x or self.position2.x < aPosition.x < self.position1.x):
-            if(self.position1.y < aPosition.y < self.position2.y or self.position2.y < aPosition.y < self.position1.y): return True
-        return False
+        return (self.position1.x < aPosition.x < self.position2.x or self.position2.x < aPosition.x < self.position1.x) and (self.position1.y < aPosition.y < self.position2.y or self.position2.y < aPosition.y < self.position1.y)
 
     def drawDebugHitbox(self, aScreen, carposition):
         """Draws the Hitbox outlines if the developer requests it.

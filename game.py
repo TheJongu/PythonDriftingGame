@@ -56,10 +56,10 @@ class Game:
         image_path = os.path.join(current_dir, "car.png")
         car_image = pygame.image.load(image_path)
         car_image = pygame.transform.scale(car_image, (48,24))
-        track01_image = pygame.image.load("tracks/track_01.jpg")
+        track01_image = pygame.image.load("tracks/track_02.jpg")
         track01_image = pygame.transform.scale(track01_image,(1600,900))
-        car = Car(200, 100, 401, -100, 20, 800, trackdata.track01_hitboxes)
-        lapManager = LapManager(trackdata.track01_checkpoints)
+        car = Car(200, 100, 401, -100, 20, 800, trackdata.track02_hitboxes)
+        lapManager = LapManager(trackdata.track02_checkpoints)
 
         
         while not self.exit:
@@ -83,10 +83,7 @@ class Game:
             car.drawSkidMarks(self.screen)
             rect = rotated.get_rect()
 
-
-
             self.screen.blit(rotated, car.displayPngPosition - (rect.width / 2, rect.height / 2))
-            
 
             #pygame.draw.circle(self.screen, (255,255,0), car.position, 15, 10)
             #pygame.draw.circle(self.screen, (0,255,0), car.frontWheel, 15, 10)
@@ -109,8 +106,9 @@ class Game:
             #for hitbox in trackdata.track01_hitboxes:        
             #    hitbox.drawDebugHitbox(self.screen, car.position)
 
-           # for hitbox in trackdata.track01_checkpoints:        
+            #for hitbox in trackdata.track02_checkpoints:        
             #    hitbox.drawDebugHitbox(self.screen, car.position)
+
 
             pygame.display.flip()
 

@@ -41,7 +41,7 @@ class LapManager:
     def drawCheckpointMarks(self, aScreen):
         
         for checkpoint in self.checkpointList:            
-            self.drawOneCheckpointMark(checkpoint, aScreen, (255,255,0))
+            self.drawOneCheckpointMark(checkpoint, aScreen, (150,150,150))
         self.drawOneCheckpointMark(self.currentCheckpoint, aScreen, (0,255,0))
             
     def drawOneCheckpointMark(self, checkpoint, aScreen, aColor):
