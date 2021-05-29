@@ -9,6 +9,7 @@ import pygame as py
 import time
 from pygame import Vector2
 from hitbox import Hitbox
+from loguru import logger
 
 class LapManager:
     """A Hitbox is a invisible rect, which defines areas. These can be used to change the cars speed.
@@ -27,6 +28,7 @@ class LapManager:
 
     def checkCheckpointPassed(self, carposition: Vector2):
         if self.currentCheckpoint.checkIfPointIsInside(carposition):
+            logger.debug("Car passed checkpoint - \tCar Position:" + str(carposition) + " \tCheckpoint Pos1:" + str(self.currentCheckpoint.position1)+ " \tCheckpoint Pos2:" + str(self.currentCheckpoint.position2))
             self.checkpointsPassed += 1
             if(self.checkpointsPassed > len(self.checkpointList) - 1):
                 # only first time

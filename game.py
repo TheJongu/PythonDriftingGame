@@ -19,6 +19,7 @@ from skidmark import SkidMark
 from hitbox import Hitbox
 from trackdata import Trackdata
 from lapmanager import LapManager
+from loguru import logger
 
 class Game:
     """ The Game Class, of which the object handles all the basic of the game
@@ -65,6 +66,7 @@ class Game:
             pressed = pygame.key.get_pressed()
             if pressed[pygame.K_ESCAPE]:
                 self.exit = True
+                logger.debug("Exiting running Game, going to menu) 
 
             self.car.processInputs(pressed, dt)
             # Drawing

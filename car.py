@@ -11,6 +11,7 @@ from math import sin, cos, tan,atan2, radians, degrees, copysign
 from pygame import Vector2
 from skidmark import SkidMark
 from hitbox import Hitbox
+from loguru import logger
 
 class Car:
     """A class to represent the driving car on screen with the necessary calculations to simulate the driving physics.
@@ -64,9 +65,12 @@ class Car:
 
         self.skidMarkList = []
         if aCarType == 1:
+            logger.success("Car Created - Driftcar")
             self.carImage = "car_try.png"
         if aCarType == 2:
+            logger.success("Car Created - Racecar")
             self.carImage = "race_car.png"
+        
             
 
     def processInputs(self, aPressedKey, aDelta):
@@ -243,9 +247,9 @@ class Car:
             del self.skidMarkList[:2]
     
     def calculateHitboxes(self):
-    
         for hitbox in self.hitboxList:            
             if hitbox.checkIfPointIsInside(self.position):
+                logger.debug("Car is in a Hitbox: - \tCar Position:" + str(self.position) + " \tHitbox Pos1:" + str(hitbox.position1)+ " \tHitbox Pos2:" + str(hitbox.position2))
                 if hitbox.slowdownFlag:
                     self.currentFrontSpeed = hitbox.maxSpeed
                 else:
