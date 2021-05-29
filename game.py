@@ -34,7 +34,6 @@ class Game:
         self.ticks = 60
         self.exit = False
         self.track = self.loadTrack(aTrack)
-        print("aCarType" + str(aCarType))
         self.car = self.createCar(aCarType, aTrack)
         
 

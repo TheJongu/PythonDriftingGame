@@ -12,7 +12,10 @@ os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 import pygame
 import pygame_menu
 from game import Game
+from loguru import logger
 pygame.init()
+logger.add("file_{time}.log")
+logger.add("out.log", backtrace=True, diagnose=True)
 
 surface = pygame.display.set_mode((1600, 900))
 

@@ -64,7 +64,7 @@ class Car:
 
         self.skidMarkList = []
         if aCarType == 1:
-            self.carImage = "drift_car.png"
+            self.carImage = "car_try.png"
         if aCarType == 2:
             self.carImage = "race_car.png"
             
