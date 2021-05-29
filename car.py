@@ -30,9 +30,9 @@ class Car:
 
         SOURCES:   
             Car pictures have been taken from:
-                Drift-Car: https://www.shutterstock.com/de/image-illustration/scarlet-red-modern-sports-car-top-606631487
-                Race-Car (F1): VectorStock.com/17359688
-            They have been edited by me.
+                Drift-Car: https://de.123rf.com/photo_78087079_scarlet-red-modern-super-sports-car-top-down-view.html?vti=lfl0avz5gsvt0516rl-1-3
+                Race-Car (F1): https://niharikaghorpade.wordpress.com/2018/02/24/2018-f1-car-launch-mclaren-mcl33/
+            They have been edited by me to remove backgrounds
         """
         
         # Constants
