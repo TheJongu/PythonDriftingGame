@@ -17,7 +17,7 @@ class Car:
     """
 
 
-    def __init__(self, x, y, aMaxSpeed = 600, aBackSpeed = -100, aMinWheelbase = 50, aMaxWheelbase = 500, aHitboxList=[]):
+    def __init__(self, x, y, aMaxSpeed = 600, aBackSpeed = -100, aMinWheelbase = 50, aMaxWheelbase = 500, aHitboxList=[], aCarType = 1):
         """Inits the car with parameters, which change the cars behaviour.
 
         Args:
@@ -28,6 +28,11 @@ class Car:
             aMinWheelbase (int, optional): the minimum distance the simulated wheels can be appart, usually when slow/standing, impacts slow turing. Defaults to 50.
             aMaxWheelbase (int, optional): the maximum distance the simulated wheels can be appart, usually when highspeed, impacts the drifting handling massively. Defaults to 500.
 
+        SOURCES:   
+            Car pictures have been taken from:
+                Drift-Car: https://www.shutterstock.com/de/image-illustration/scarlet-red-modern-sports-car-top-606631487
+                Race-Car (F1): VectorStock.com/17359688
+            They have been edited by me.
         """
         
         # Constants
@@ -58,6 +63,11 @@ class Car:
         self.direction = 0
 
         self.skidMarkList = []
+        if aCarType == 1:
+            self.carImage = "drift_car.png"
+        if aCarType == 2:
+            self.carImage = "race_car.png"
+            
 
     def processInputs(self, aPressedKey, aDelta):
         """Gets the pressed key and the time since the last call to process the cars behaviour.

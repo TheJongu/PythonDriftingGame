@@ -8,8 +8,6 @@ Runs a simple drifting game.
 
 """
 import os
-# Hide pygame prompt
-os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 import pygame
 import random
 from math import sin, cos, tan,atan2, radians, degrees, copysign
@@ -36,6 +34,7 @@ class Game:
         self.ticks = 60
         self.exit = False
         self.track = self.loadTrack(aTrack)
+        print("aCarType" + str(aCarType))
         self.car = self.createCar(aCarType, aTrack)
         
 
@@ -48,9 +47,10 @@ class Game:
                 * Does the game run at the correct fps?
         """
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        image_path = os.path.join(current_dir, "car.png")
-        car_image = pygame.image.load(image_path)
+        image_path = os.path.join(current_dir, self.car.carImage)
+        car_image = pygame.image.load(image_path).convert_alpha()
         car_image = pygame.transform.scale(car_image, (48,24))        
+        pygame.Surface((48,24), )
 
         
         while not self.exit:
@@ -69,7 +69,7 @@ class Game:
 
             self.car.processInputs(pressed, dt)
             # Drawing
-            self.screen.fill((100, 100, 100))
+            self.screen.fill((255,255,255))
             self.screen.blit(self.trackImage, (0,0))
             self.lapManager.drawCheckpointMarks(self.screen)
             rotated = pygame.transform.rotate(car_image, degrees(-self.car.direction))
@@ -131,9 +131,9 @@ class Game:
             aCarType (int): 1 (driftcar) or 2 (race car)
         """
         if aTrack == 1:
-            return Car(200, 100, 401, -100, 20, 800, self.trackdata.track01_hitboxes)
+            return Car(200, 100, 401, -100, 20, 800, self.trackdata.track01_hitboxes, aCarType)
         else:
-            return Car(200, 100, 401, -100, 20, 800, self.trackdata.track02_hitboxes)
+            return Car(200, 100, 401, -100, 20, 800, self.trackdata.track02_hitboxes, aCarType)
 
 
 # Start Game
