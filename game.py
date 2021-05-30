@@ -66,7 +66,7 @@ class Game:
             pressed = pygame.key.get_pressed()
             if pressed[pygame.K_ESCAPE]:
                 self.exit = True
-                logger.debug("Exiting running Game, going to menu) 
+                logger.debug("Exiting running Game, going to menu") 
 
             self.car.processInputs(pressed, dt)
             # Drawing
@@ -79,19 +79,20 @@ class Game:
 
             self.screen.blit(rotated, self.car.displayPngPosition - (rect.width / 2, rect.height / 2))
 
-            #pygame.draw.circle(self.screen, (255,255,0), car.position, 15, 10)
-            #pygame.draw.circle(self.screen, (0,255,0), car.frontWheel, 15, 10)
-            #pygame.draw.circle(self.screen, (0,0,255), car.turningWheel, 15, 10)
+            pygame.draw.circle(self.screen, (255,255,0), self.car.position, 15, 10)
+            pygame.draw.circle(self.screen, (0,255,0), self.car.frontWheel, 15, 10)
+            pygame.draw.circle(self.screen, (0,0,255), self.car.turningWheel, 15, 10)
             #pygame.draw.circle(self.screen, (255,255,0), car.displayPos1, 15, 10)
             #pygame.draw.circle(self.screen, (255,0,255), car.displayPos2, 15, 10)
             #pygame.draw.circle(self.screen, (0,255,255), car.displayPos3, 15, 10)
             
-            speed = self.car.speed / 3
-            if 130 < speed < 137: speed = 130
+            speed = self.car.speed 
+            #if 130 < speed < 137: speed = 130
             textsurfaceVector = self.myfont.render("CarSpeed: " + str(int(speed)), False, (0, 0, 0))
             self.screen.blit(textsurfaceVector,(190,25))
 
             textsurfaceVector = self.myfont.render("Last Lap time: " + str(round(self.lapManager.lastLap, 3)), False, (0, 0, 0))
+            #textsurfaceVector = self.myfont.render("Last Lap time: " + str(self.car.steerAngle), False, (0, 0, 0))
             self.screen.blit(textsurfaceVector,(440,25))
 
             textsurfaceVector = self.myfont.render("Fastest Lap: " + str(round(self.lapManager.fastestLap, 3)), False, (0, 0, 0))

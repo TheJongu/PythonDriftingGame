@@ -7,7 +7,7 @@
 
 import pygame
 import random
-from math import sin, cos, tan,atan2, radians, degrees, copysign
+from math import sin, cos, sqrt, log2,atan2, radians, degrees
 from pygame import Vector2
 from skidmark import SkidMark
 from hitbox import Hitbox
@@ -67,9 +67,11 @@ class Car:
         if aCarType == 1:
             logger.success("Car Created - Driftcar")
             self.carImage = "car_try.png"
+            self.driftcarFlag = True
         if aCarType == 2:
             logger.success("Car Created - Racecar")
             self.carImage = "race_car.png"
+            self.driftcarFlag = False
         
             
 
@@ -108,9 +110,19 @@ class Car:
         if abs(self.speed) < 10: self.steerAngle = 0
 
         if aPressedKey[pygame.K_RIGHT] or aPressedKey[pygame.K_d] or aPressedKey[pygame.K_m]:
-            self.steerRight()
+            if(self.driftcarFlag):
+                self.steerRightDrift()
+            else:
+                self.steerRightRace()
         elif aPressedKey[pygame.K_LEFT] or aPressedKey[pygame.K_a] or aPressedKey[pygame.K_n]:
-            self.steerLeft()
+            if(self.driftcarFlag):
+                self.steerLeftDrift()
+            else:
+                self.steerLeftRace()
+        elif not self.driftcarFlag:
+            self.steerAngle = 0
+        else:
+            self.decreaseSteeringDrift()
 
         if aPressedKey[pygame.K_SPACE]:
             self.speed = self.speed + 20
@@ -166,8 +178,8 @@ class Car:
         else: self.speed += deceleration
         if abs(self.speed) < 5: self.speed = 0
 
-    def steerRight(self):
-        """Steers the car right with a set turningangle every updatetick.
+    def steerRightDrift(self):
+        """Steers the car right with a set turningangle every updatetick. Steering made for drifting.
 
         The more the car is already turning, the longer it takes the car to turn more. This is so, that the car is easier drivable with a keyboard
         TODO: add a function for the steeringAngleDecrease
@@ -188,8 +200,8 @@ class Car:
             if abs(self.steerAngle) > 3: self.steerAngle = -3
         else:
             self.steerAngle = 0
-    def steerLeft(self):
-        """Steers the car left with a set turningangle every updatetick.
+    def steerLeftDrift(self):
+        """Steers the car left with a set turningangle every updatetick. Steering made for drifting.
         The more the car is already turning, the longer it takes the car to turn more. This is so, that the car is easier drivable with a keyboard
         TODO: add a function for the steeringAngleDecrease
 
@@ -210,6 +222,60 @@ class Car:
         else:
             self.steerAngle = 0
 
+    def decreaseSteeringDrift(self):
+        if self.steerAngle > 0.05:
+            self.steerAngle -= 0.025
+        if self.steerAngle < -0.05:
+            self.steerAngle += 0.025
+            
+
+    def steerRightRace(self):
+        """Steers the car right with a set turningangle every updatetick. Steering made for race car driving.
+
+        Race-Steering is based on speed, the faster, the less turing.
+
+        Tests:
+            * Car turns in to the right when button is pressed
+            * Car turns slower the faster it is
+            * After releasing the button, the car doesnt steer anymore
+        """
+        if abs(self.speed) > 0:
+            if self.speed < 50:      self.steerAngle = 1.30
+            elif self.speed < 100:   self.steerAngle = 1.20
+            elif self.speed < 150:   self.steerAngle = 1.00
+            elif self.speed < 200:   self.steerAngle = 0.85
+            elif self.speed < 250:   self.steerAngle = 0.65
+            elif self.speed < 300:   self.steerAngle = 0.45
+            elif self.speed < 350:   self.steerAngle = 0.30
+            elif self.speed < 400:   self.steerAngle = 0.20
+            elif self.speed < 800:   self.steerAngle = 0.15
+
+        else:
+            self.steerAngle = 0
+
+    def steerLeftRace(self):
+        """Steers the car left with a set turningangle every updatetick. Steering made for race car driving.
+
+        Race-Steering is based on speed, the faster, the less turing.
+
+        Tests:
+            * Car turns in to the right when button is pressed
+            * Car turns slower the faster it is
+            * After releasing the button, the car doesnt steer anymore
+        """
+        if abs(self.speed) > 0:
+            if self.speed < 50:      self.steerAngle = -1.30
+            elif self.speed < 100:   self.steerAngle = -1.20
+            elif self.speed < 150:   self.steerAngle = -1.00
+            elif self.speed < 200:   self.steerAngle = -0.85
+            elif self.speed < 250:   self.steerAngle = -0.65
+            elif self.speed < 300:   self.steerAngle = -0.45
+            elif self.speed < 350:   self.steerAngle = -0.30
+            elif self.speed < 400:   self.steerAngle = -0.20
+            elif self.speed < 800:   self.steerAngle = -0.15
+        else:
+            self.steerAngle = 0
+
     def calcWheelBase(self):
         """ Calculates the wheelbase based on the speed. The faster the car is, the further appart the two simulated wheels are, until the MAXWHEELBASE is hit.
         The slower the car is, the shorter the wheelbase is, with a minimum of MINWHEELBASE 
@@ -218,13 +284,15 @@ class Car:
             * The Wheelbase of the car can not be smaller/bigger then the defined MINWHEELBASE/MAXWHEELBASE of the car
             * The calculation is correct
         """       
-        self.wheelBase = abs(self.speed)/2
-        
-        if(self.wheelBase < self.MINWHEELBASE):
-            self.wheelBase = self.MINWHEELBASE
-        if(self.wheelBase > self.MAXWHEELBASE):
-            self.wheelBase = self.MAXWHEELBASE
-
+        if(self.driftcarFlag):
+            self.wheelBase = abs(self.speed)/2
+            
+            if(self.wheelBase < self.MINWHEELBASE):
+                self.wheelBase = self.MINWHEELBASE
+            if(self.wheelBase > self.MAXWHEELBASE):
+                self.wheelBase = self.MAXWHEELBASE
+        else:
+            self.wheelBase = self.MINWHEELBASE + 50
     
 
     def drawSkidMarks(self, aScreen):  
@@ -273,24 +341,34 @@ class Car:
             * Does the car not exceed the max speed?
         """
 
-        if(self.speed > 0):
-            self.turningWheel = self.position - self.wheelBase/2 * Vector2( cos(self.direction) , sin(self.direction))
-            self.frontWheel = self.position + self.wheelBase/2 * Vector2( cos(self.direction) , sin(self.direction))  
-
-            self.frontWheel += self.speed * dt * Vector2(cos(self.direction) , sin(self.direction))
-            self.turningWheel += self.speed * dt * Vector2(cos(self.direction+self.steerAngle) , sin(self.direction+self.steerAngle))
-
-            self.position = (self.turningWheel + self.frontWheel) / 2
-            self.direction = atan2( self.frontWheel.y - self.turningWheel.y , self.frontWheel.x - self.turningWheel.x )
+        if(self.speed > 0 and self.driftcarFlag):
+            self.backWheelTurningWheel(dt)
+        elif(self.speed < 0 and self.driftcarFlag): 
+            self.frontWheelTurningWheel(dt)
+        elif(self.speed > 0 and not self.driftcarFlag):
+            self.frontWheelTurningWheel(dt)
         else: 
-            self.turningWheel = self.position - self.wheelBase/2 * Vector2( cos(self.direction) , sin(self.direction))
-            self.frontWheel = self.position + self.wheelBase/2 * Vector2( cos(self.direction) , sin(self.direction))  
+            self.frontWheelTurningWheel(dt)
 
-            self.turningWheel += self.speed * dt * Vector2(cos(self.direction) , sin(self.direction))
-            self.frontWheel += self.speed * dt * Vector2(cos(self.direction+self.steerAngle) , sin(self.direction+self.steerAngle))
+    def backWheelTurningWheel(self, dt):        
+        self.turningWheel = self.position - self.wheelBase/2 * Vector2( cos(self.direction) , sin(self.direction))
+        self.frontWheel = self.position + self.wheelBase/2 * Vector2( cos(self.direction) , sin(self.direction))  
 
-            self.position = (self.turningWheel + self.frontWheel) / 2
-            self.direction = atan2( self.frontWheel.y - self.turningWheel.y , self.frontWheel.x - self.turningWheel.x )
+        self.frontWheel += self.speed * dt * Vector2(cos(self.direction) , sin(self.direction))
+        self.turningWheel += self.speed * dt * Vector2(cos(self.direction+self.steerAngle) , sin(self.direction+self.steerAngle))
+
+        self.position = (self.turningWheel + self.frontWheel) / 2
+        self.direction = atan2( self.frontWheel.y - self.turningWheel.y , self.frontWheel.x - self.turningWheel.x )
+
+    def frontWheelTurningWheel(self, dt):
+        self.turningWheel = self.position - self.wheelBase/2 * Vector2( cos(self.direction) , sin(self.direction))
+        self.frontWheel = self.position + self.wheelBase/2 * Vector2( cos(self.direction) , sin(self.direction))  
+
+        self.turningWheel += self.speed * dt * Vector2(cos(self.direction) , sin(self.direction))
+        self.frontWheel += self.speed * dt * Vector2(cos(self.direction+self.steerAngle) , sin(self.direction+self.steerAngle))
+
+        self.position = (self.turningWheel + self.frontWheel) / 2
+        self.direction = atan2( self.frontWheel.y - self.turningWheel.y , self.frontWheel.x - self.turningWheel.x )
 
     def update(self, dt):
         """ Updates the cars physics and position
