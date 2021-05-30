@@ -79,9 +79,9 @@ class Game:
 
             self.screen.blit(rotated, self.car.displayPngPosition - (rect.width / 2, rect.height / 2))
 
-            pygame.draw.circle(self.screen, (255,255,0), self.car.position, 15, 10)
-            pygame.draw.circle(self.screen, (0,255,0), self.car.frontWheel, 15, 10)
-            pygame.draw.circle(self.screen, (0,0,255), self.car.turningWheel, 15, 10)
+            #pygame.draw.circle(self.screen, (255,255,0), self.car.position, 15, 10)
+            #pygame.draw.circle(self.screen, (0,255,0), self.car.frontWheel, 15, 10)
+            #pygame.draw.circle(self.screen, (0,0,255), self.car.turningWheel, 15, 10)
             #pygame.draw.circle(self.screen, (255,255,0), car.displayPos1, 15, 10)
             #pygame.draw.circle(self.screen, (255,0,255), car.displayPos2, 15, 10)
             #pygame.draw.circle(self.screen, (0,255,255), car.displayPos3, 15, 10)
