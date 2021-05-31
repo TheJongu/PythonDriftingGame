@@ -10,6 +10,7 @@ Runs a simple drifting game.
 import os
 import pygame
 import random
+import pygame_menu
 from math import sin, cos, tan,atan2, radians, degrees, copysign
 from pygame import Vector2
 pygame.font.init()
@@ -62,13 +63,16 @@ class Game:
                 if event.type == pygame.QUIT:
                     self.exit = True
 
-            # User input
-            pressed = pygame.key.get_pressed()
-            if pressed[pygame.K_ESCAPE]:
-                self.exit = True
-                logger.debug("Exiting running Game, going to menu") 
+            if self.lapManager.laps != 2:
+                # User input
+                pressed = pygame.key.get_pressed()
+                if pressed[pygame.K_ESCAPE]:
+                    self.exit = True
+                    logger.debug("Exiting running Game, going to menu") 
 
-            self.car.processInputs(pressed, dt)
+                self.car.processInputs(pressed, dt)
+            else: 
+                self.finishGame()
             # Drawing
             self.screen.fill((255,255,255))
             self.screen.blit(self.trackImage, (0,0))
@@ -98,6 +102,9 @@ class Game:
             textsurfaceVector = self.myfont.render("Fastest Lap: " + str(round(self.lapManager.fastestLap, 3)), False, (0, 0, 0))
             self.screen.blit(textsurfaceVector,(780,25))
 
+            textsurfaceVector = self.myfont.render("Lap: " + str(self.lapManager.laps) + "/5", False, (0, 0, 0))
+            self.screen.blit(textsurfaceVector,(1100,25))
+
             #for hitbox in trackdata.track01_hitboxes:        
             #    hitbox.drawDebugHitbox(self.screen, car.position)
 
@@ -108,6 +115,7 @@ class Game:
             pygame.display.flip()
 
             self.clock.tick(self.ticks)
+        
 
     def loadTrack(self, aTrack):
         """ Loads the track data into the object variables game
@@ -136,6 +144,23 @@ class Game:
             return Car(200, 100, 401, -100, 20, 800, self.trackdata.track01_hitboxes, aCarType)
         else:
             return Car(200, 100, 401, -100, 20, 800, self.trackdata.track02_hitboxes, aCarType)
+    
+    def finishGame(self):
+        mytheme = pygame_menu.themes.THEME_BLUE
+
+        menu1 = pygame_menu.Menu('Results', 1600, 900, theme=mytheme)
+        menu1.add.label("Jakob suxx")
+        menu1.add.label("Jakob suxx1")
+        menu1.add.label("Jakob suxx2")
+        menu1.add.button('Back to Menu', self.stop)
+        
+        self.resultScreenExit = False
+        while not self.resultScreenExit:     
+            menu1.mainloop(self.screen)
+
+    def stop(self):
+        self.resultScreenExit = True
+        self.exit = True
 
 
 # Start Game

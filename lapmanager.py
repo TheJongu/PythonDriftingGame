@@ -24,7 +24,7 @@ class LapManager:
         self.currentCheckpoint = self.checkpointList[len(self.checkpointList)-1]
         self.lastLap = 0
         self.fastestLap = 0
-        self.laps = 0
+        self.laps = 1
 
     def checkCheckpointPassed(self, carposition: Vector2):
         if self.currentCheckpoint.checkIfPointIsInside(carposition):
@@ -35,6 +35,7 @@ class LapManager:
                 if(self.startTime != 0):
                     self.lastLap = time.time() - self.startTime
                     if self.lastLap < self.fastestLap or self.fastestLap == 0: self.fastestLap = self.lastLap
+                    self.laps = self.laps + 1
                 self.startTime = time.time()
                 self.checkpointsPassed = 0
 
