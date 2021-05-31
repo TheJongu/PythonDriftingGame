@@ -16,48 +16,37 @@ class SkidMark:
     # Variables
 
     def __init__(self, aPositionTuple, aRotation, anAlpha, aSpeed):
+        """Init the Skidmark. Most of the params are not used, maybe in the next development.
+
+        Args:
+            aPositionTuple ((x,y))): position of the skidmark
+            aRotation (rotation): rotation
+            anAlpha (0-255): alpha of the skidmark
+            aSpeed (float): Speed of the car
+        """
         self.PositionTuple = aPositionTuple
         self.Rotation = aRotation
         self.Alpha = anAlpha
         self.TimeToLive = 255.0
         self.CarSpeed = aSpeed
+        #Define colors
         self.BLACK = (0 , 0 , 0)
-
-         
-        self.color = abs(77 - abs(anAlpha * anAlpha *  20))
-        
+        # Color 77,77,77 is Max lightiness, go down to more black from here
+        self.color = abs(77 - abs(anAlpha * anAlpha *  20))        
         self.GREEN = (self.color,self.color,self.color)
         self.TEXTURE = (60 , 60 , 60)
         random.randint(45,65)
-        # define a surface (RECTANGLE)  
-        self.TimeToLive = abs(255)
+        # Give the skidmark a time to live
+        self.TimeToLive = 255
         self.image_orig = py.Surface((8 , 8))  
-        #self.image_orig.fill((180,20,20))
-        # for making transparent background while rotating an image  
-        #self.image_orig.fill( self.GREEN)
         self.image_orig.set_colorkey(self.BLACK)  
+        # Draw the skidmark onto the surface
         py.draw.circle(self.image_orig, self.GREEN, (4,4), 4, 10)
-        #theColor = random.randint(45,65)
-        #py.draw.line(self.image_orig,(theColor,theColor,theColor),(random.randint(4,12),random.randint(4,12)),(random.randint(4,12),random.randint(4,12)))
-        #theColor = random.randint(45,65)
-        #py.draw.line(self.image_orig,(theColor,theColor,theColor),(random.randint(4,12),random.randint(4,12)),(random.randint(4,12),random.randint(4,12)))
-        #theColor = random.randint(45,65)
-        #py.draw.line(self.image_orig,(theColor,theColor,theColor),(random.randint(4,12),random.randint(4,12)),(random.randint(4,12),random.randint(4,12)))
-        #theColor = random.randint(45,65)
-
-        # fill the rectangle / surface with green color  
-        #self.image_orig.fill(self.GREEN)  
-        # creating a copy of orignal image for smooth rotation  
         self.image = self.image_orig.copy()
         self.image.set_colorkey(self.BLACK)  
-        # define rect for placing the rectangle at the desired position  
         self.rect = self.image.get_rect()  
         self.rect.center = self.PositionTuple  
-        # keep rotating the rectangle until running is set to False  
     
-        # clear the screen every time before drawing new objects  
-        
-
         # making a copy of the old center of the rectangle  
         self.old_center = self.rect.center  
         # defining angle of the rotation  
@@ -68,25 +57,25 @@ class SkidMark:
         self.rect = self.new_image.get_rect()
 
 
-
     def update(self, screen, dt):    
+        """Update the time to live of the skidmark lower until it invisible. Gets deleted from the skidmark list after too many new ones have been created.
 
+        Args:
+            screen (pygame-screen): the screen
+            dt (float): time since last call
+        """
         # set the rotated rectangle to the old center  
         self.rect.center = self.old_center  
         self.TimeToLive -= .1
         if(self.TimeToLive < 0): self.TimeToLive = 0
         self.new_image.set_alpha(int(self.TimeToLive))
         
-        # drawing the rotated rectangle to the screen  
-        #py.draw.circle(screen, self.GREEN, self.PositionTuple, 8, 10)
+        # drawing the rotated skidmark to the screen  
         screen.blit(self.new_image , self.rect)
 
-
-
-
-# #### Temp
+# #### Temp for RGB-Skidmarks
 # for aSkidMark in self.skidMarkList:
-#             pygame.draw.rect(aScreen, (green, green, green, 0), aSkidMark, 5, 1)
+#             pygame.draw.rect(aScreen, (red, green, blue, 0), aSkidMark, 5, 1)
 #             # if red == 255 and blue == 0:
 #             #     green  += 5
 #             # if green == 255 and blue == 0:

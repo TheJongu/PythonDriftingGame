@@ -64,7 +64,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     self.exit = True
 
-            if self.lapManager.laps != 2:
+            if self.lapManager.laps != 5:
                 # User input
                 pressed = pygame.key.get_pressed()
                 if pressed[pygame.K_ESCAPE]:
@@ -84,9 +84,10 @@ class Game:
 
             self.screen.blit(rotated, self.car.displayPngPosition - (rect.width / 2, rect.height / 2))
 
-            pygame.draw.circle(self.screen, (255,255,0), self.car.position, 15, 10)
-            pygame.draw.circle(self.screen, (0,255,0), self.car.frontWheel, 15, 10)
-            pygame.draw.circle(self.screen, (0,0,255), self.car.turningWheel, 15, 10)
+            # For debugging car position
+            #pygame.draw.circle(self.screen, (255,255,0), self.car.position, 15, 10)
+            #pygame.draw.circle(self.screen, (0,255,0), self.car.frontWheel, 15, 10)
+            #pygame.draw.circle(self.screen, (0,0,255), self.car.turningWheel, 15, 10)
             #pygame.draw.circle(self.screen, (255,255,0), car.displayPos1, 15, 10)
             #pygame.draw.circle(self.screen, (255,0,255), car.displayPos2, 15, 10)
             #pygame.draw.circle(self.screen, (0,255,255), car.displayPos3, 15, 10)
@@ -106,9 +107,11 @@ class Game:
             textsurfaceVector = self.myfont.render("Lap: " + str(self.lapManager.laps) + "/5", False, (0, 0, 0))
             self.screen.blit(textsurfaceVector,(1100,25))
 
+            #debug for drawing hitboxes of the tracks
             #for hitbox in trackdata.track01_hitboxes:        
             #    hitbox.drawDebugHitbox(self.screen, car.position)
-
+            
+            #debug for drawing hitboxes of the tracks
             #for hitbox in trackdata.track02_checkpoints:        
             #    hitbox.drawDebugHitbox(self.screen, car.position)
 
@@ -123,6 +126,11 @@ class Game:
 
         Args:
             aTrack (int): 1 (easy) or 2 (expert)
+
+        Tests:
+            * Is the correct track loaded?
+            * Do the checkpoints work?
+            * Do the hitboxes word?
         """
         self.trackdata = Trackdata()
         if aTrack == 1:
@@ -140,6 +148,10 @@ class Game:
 
         Args:
             aCarType (int): 1 (driftcar) or 2 (race car)
+
+        Tests:
+            * Is the car set correctly?
+            * Do driftcar and race car behave differently?
         """
         if aTrack == 1:
             return Car(200, 100, 401, -100, 20, 800, self.trackdata.track01_hitboxes, aCarType)
@@ -147,28 +159,39 @@ class Game:
             return Car(200, 100, 401, -100, 20, 800, self.trackdata.track02_hitboxes, aCarType)
     
     def finishGame(self):
+        """After racing 5 laps, stop the game and show the finish screen.
+
+        Tests:
+            * Is the time correct?
+            * Is the text readable?
+        """
         mytheme = pygame_menu.themes.THEME_ORANGE
 
-        
         # Set Background Image
         myimage = pygame_menu.baseimage.BaseImage(
             image_path="tracks/trophy.jpg"
         )
         mytheme.background_color = myimage
-        menu1 = pygame_menu.Menu('Results', 1600, 900, theme=mytheme)
+        resultScreen = pygame_menu.Menu('Results', 1600, 900, theme=mytheme)
 
 
-        menu1.add.label("Schnellste Runde:\t" + str(round(self.lapManager.fastestLap, 3)))
-        menu1.add.label("Gesamt Renndauer:\t"+ str(round(time.time() - self.lapManager.raceTimeStart, 3)))
-        menu1.add.label("")
+        resultScreen.add.label("Schnellste Runde:\t" + str(round(self.lapManager.fastestLap, 3)))
+        resultScreen.add.label("Gesamt Renndauer:\t"+ str(round(time.time() - self.lapManager.raceTimeStart, 3)))
+        resultScreen.add.label("")
         
-        menu1.add.button('Back to Menu', self.stop)
+        resultScreen.add.button('Back to Menu', self.stopResultMenu)
         
         self.resultScreenExit = False
         while not self.resultScreenExit:     
-            menu1.mainloop(self.screen)
+            resultScreen.mainloop(self.screen)
 
-    def stop(self):
+    def stopResultMenu(self):
+        """Stop the result menu and stop the game
+
+        Tests:
+            * Is the result menu closed correctly?
+            * Is the game reset to the menu?
+        """
         self.resultScreenExit = True
         self.exit = True
 

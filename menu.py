@@ -66,38 +66,38 @@ def runGame():
     myGame = Game(surface, menu.carType, menu.track)
     myGame.run()
 
-def showControlls():
+def showControls():
     """ Open a new menu for the Display of the controls
 
     Tests:
         * Does the control menu open?
         * Does the control menu show the controls?
     """
-    controllTheme = pygame_menu.themes.THEME_DEFAULT
+    controlTheme = pygame_menu.themes.THEME_DEFAULT
 
     # Set Background Image
-    controllImage = pygame_menu.baseimage.BaseImage(
+    controlImage = pygame_menu.baseimage.BaseImage(
         image_path="tracks/Keyboardlayout.jpg"
     )
-    controllTheme.background_color = controllImage
-    controllMenu = pygame_menu.Menu('Controls', 1600, 900, theme=controllTheme)
+    controlTheme.background_color = controlImage
+    controlMenu = pygame_menu.Menu('Controls', 1600, 900, theme=controlTheme)
     
     # Labels to push back to menu button lower
-    controllMenu.add.label("")
-    controllMenu.add.label("")
-    controllMenu.add.label("")
-    controllMenu.add.label("")
-    controllMenu.add.label("")
-    controllMenu.add.label("")
-    controllMenu.add.label("")
-    controllMenu.add.label("")
-    controllMenu.add.label("")
-    controllMenu.add.label("")
+    controlMenu.add.label("")
+    controlMenu.add.label("")
+    controlMenu.add.label("")
+    controlMenu.add.label("")
+    controlMenu.add.label("")
+    controlMenu.add.label("")
+    controlMenu.add.label("")
+    controlMenu.add.label("")
+    controlMenu.add.label("")
+    controlMenu.add.label("")
     # Quit
-    controllMenu.add.button('Back to Menu', finishControl)
+    controlMenu.add.button('Back to Menu', finishControl)
     menu.controlMenuExit = False
     while not menu.controlMenuExit:     
-        controllMenu.mainloop(surface)
+        controlMenu.mainloop(surface)
 def finishControl():
     """ Function to return to the main menu from the controll menu
 
@@ -115,7 +115,7 @@ menu.track = 1
 menu.add.button('Play', runGame)
 menu.add.selector('Car : ', [('Drift Car', 1), ('Race Car', 2)], onchange=setCarType)
 menu.add.selector('Track : ', [('Easy', 1), ('Expert', 2)], onchange=setTrack)
-menu.add.button("Controlls", showControlls)
+menu.add.button("Controls", showControls)
 menu.add.button('Quit', pygame_menu.events.EXIT)
 
 # Start Game

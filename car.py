@@ -182,7 +182,6 @@ class Car:
         """Steers the car right with a set turningangle every updatetick. Steering made for drifting.
 
         The more the car is already turning, the longer it takes the car to turn more. This is so, that the car is easier drivable with a keyboard
-        TODO: add a function for the steeringAngleDecrease
 
         Tests:
             * Car turns in to the right when button is pressed
@@ -203,7 +202,6 @@ class Car:
     def steerLeftDrift(self):
         """Steers the car left with a set turningangle every updatetick. Steering made for drifting.
         The more the car is already turning, the longer it takes the car to turn more. This is so, that the car is easier drivable with a keyboard
-        TODO: add a function for the steeringAngleDecrease
 
         Tests:
             * Car turns in to the left when button is pressed
@@ -310,6 +308,12 @@ class Car:
             del self.skidMarkList[:2]
     
     def calculateHitboxes(self):
+        """Calculate if the car is in one of the tracks hitboxes. Slow the car down if it is a slowing hitbox. Speed it up if it is a boost-pad
+
+        Tests:
+            * Is the car correctly slowed down?
+            * Do speedpad and graveltraps work?
+        """
         for hitbox in self.hitboxList:            
             if hitbox.checkIfPointIsInside(self.position):
                 logger.debug("Car is in a Hitbox: - \tCar Position:" + str(self.position) + " \tHitbox Pos1:" + str(hitbox.position1)+ " \tHitbox Pos2:" + str(hitbox.position2))
@@ -345,7 +349,17 @@ class Car:
         else: 
             self.frontWheelTurningWheel(dt)
 
-    def backWheelTurningWheel(self, dt):        
+    def backWheelTurningWheel(self, dt):    
+        """Calculate the wheel positions with the backwheel turning.
+
+        Args:
+            dt : The timedelta since the last call
+
+        Tests:
+            * Are the tires positions correctly?
+            * Does driving backwards work?
+
+        """    
         self.turningWheel = self.position - self.wheelBase/2 * Vector2( cos(self.direction) , sin(self.direction))
         self.frontWheel = self.position + self.wheelBase/2 * Vector2( cos(self.direction) , sin(self.direction))  
 
@@ -356,6 +370,15 @@ class Car:
         self.direction = atan2( self.frontWheel.y - self.turningWheel.y , self.frontWheel.x - self.turningWheel.x )
 
     def frontWheelTurningWheel(self, dt):
+        """Calculate the wheel positions with the fronwheel turning.
+
+        Args:
+            dt : The timedelta since the last call
+
+        Tests:
+            * Are the tires positions correctly?
+            * Does driving backwards work?
+        """    
         self.turningWheel = self.position - self.wheelBase/2 * Vector2( cos(self.direction) , sin(self.direction))
         self.frontWheel = self.position + self.wheelBase/2 * Vector2( cos(self.direction) , sin(self.direction))  
 
