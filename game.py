@@ -63,7 +63,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     self.exit = True
 
-            if self.lapManager.laps != 2:
+            if self.lapManager.laps != 5:
                 # User input
                 pressed = pygame.key.get_pressed()
                 if pressed[pygame.K_ESCAPE]:
@@ -83,9 +83,9 @@ class Game:
 
             self.screen.blit(rotated, self.car.displayPngPosition - (rect.width / 2, rect.height / 2))
 
-            #pygame.draw.circle(self.screen, (255,255,0), self.car.position, 15, 10)
-            #pygame.draw.circle(self.screen, (0,255,0), self.car.frontWheel, 15, 10)
-            #pygame.draw.circle(self.screen, (0,0,255), self.car.turningWheel, 15, 10)
+            pygame.draw.circle(self.screen, (255,255,0), self.car.position, 15, 10)
+            pygame.draw.circle(self.screen, (0,255,0), self.car.frontWheel, 15, 10)
+            pygame.draw.circle(self.screen, (0,0,255), self.car.turningWheel, 15, 10)
             #pygame.draw.circle(self.screen, (255,255,0), car.displayPos1, 15, 10)
             #pygame.draw.circle(self.screen, (255,0,255), car.displayPos2, 15, 10)
             #pygame.draw.circle(self.screen, (0,255,255), car.displayPos3, 15, 10)
@@ -161,7 +161,6 @@ class Game:
     def stop(self):
         self.resultScreenExit = True
         self.exit = True
-
 
 # Start Game
 if __name__ == '__main__':

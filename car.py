@@ -240,15 +240,11 @@ class Car:
             * After releasing the button, the car doesnt steer anymore
         """
         if abs(self.speed) > 0:
-            if self.speed < 50:      self.steerAngle = 1.30
-            elif self.speed < 100:   self.steerAngle = 1.20
-            elif self.speed < 150:   self.steerAngle = 1.00
-            elif self.speed < 200:   self.steerAngle = 0.85
-            elif self.speed < 250:   self.steerAngle = 0.65
-            elif self.speed < 300:   self.steerAngle = 0.45
-            elif self.speed < 350:   self.steerAngle = 0.30
-            elif self.speed < 400:   self.steerAngle = 0.20
-            elif self.speed < 800:   self.steerAngle = 0.15
+            if self.speed < 300:   self.steerAngle = 0.85
+            elif self.speed < 350:   self.steerAngle = 0.60
+            elif self.speed < 450:   self.steerAngle = 0.40
+            elif self.speed < 800:   self.steerAngle = 0.10
+            
 
         else:
             self.steerAngle = 0
@@ -264,15 +260,11 @@ class Car:
             * After releasing the button, the car doesnt steer anymore
         """
         if abs(self.speed) > 0:
-            if self.speed < 50:      self.steerAngle = -1.30
-            elif self.speed < 100:   self.steerAngle = -1.20
-            elif self.speed < 150:   self.steerAngle = -1.00
-            elif self.speed < 200:   self.steerAngle = -0.85
-            elif self.speed < 250:   self.steerAngle = -0.65
-            elif self.speed < 300:   self.steerAngle = -0.45
-            elif self.speed < 350:   self.steerAngle = -0.30
-            elif self.speed < 400:   self.steerAngle = -0.20
-            elif self.speed < 800:   self.steerAngle = -0.15
+            if self.speed < 300:   self.steerAngle = -0.85
+            elif self.speed < 350:   self.steerAngle = -0.60
+            elif self.speed < 450:   self.steerAngle = -0.40
+            elif self.speed < 800:   self.steerAngle = -0.10
+            
         else:
             self.steerAngle = 0
 
@@ -292,7 +284,10 @@ class Car:
             if(self.wheelBase > self.MAXWHEELBASE):
                 self.wheelBase = self.MAXWHEELBASE
         else:
-            self.wheelBase = self.MINWHEELBASE + 50
+            self.wheelBase = abs(self.speed)/4
+            if(self.wheelBase < 25):
+                self.wheelBase = 25
+
     
 
     def drawSkidMarks(self, aScreen):  
