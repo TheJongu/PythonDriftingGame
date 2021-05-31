@@ -19,6 +19,7 @@ class LapManager:
 
     def __init__(self, aCheckpointList):
         self.startTime = 0
+        self.raceTimeStart = 0
         self.checkpointList = aCheckpointList
         self.checkpointsPassed = len(self.checkpointList)
         self.currentCheckpoint = self.checkpointList[len(self.checkpointList)-1]
@@ -29,6 +30,7 @@ class LapManager:
     def checkCheckpointPassed(self, carposition: Vector2):
         if self.currentCheckpoint.checkIfPointIsInside(carposition):
             logger.debug("Car passed checkpoint - \tCar Position:" + str(carposition) + " \tCheckpoint Pos1:" + str(self.currentCheckpoint.position1)+ " \tCheckpoint Pos2:" + str(self.currentCheckpoint.position2))
+            if self.raceTimeStart == 0: self.raceTimeStart = time.time()
             self.checkpointsPassed += 1
             if(self.checkpointsPassed > len(self.checkpointList) - 1):
                 # only first time

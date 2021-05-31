@@ -11,6 +11,7 @@ import os
 import pygame
 import random
 import pygame_menu
+import time
 from math import sin, cos, tan,atan2, radians, degrees, copysign
 from pygame import Vector2
 pygame.font.init()
@@ -63,7 +64,7 @@ class Game:
                 if event.type == pygame.QUIT:
                     self.exit = True
 
-            if self.lapManager.laps != 5:
+            if self.lapManager.laps != 2:
                 # User input
                 pressed = pygame.key.get_pressed()
                 if pressed[pygame.K_ESCAPE]:
@@ -146,12 +147,21 @@ class Game:
             return Car(200, 100, 401, -100, 20, 800, self.trackdata.track02_hitboxes, aCarType)
     
     def finishGame(self):
-        mytheme = pygame_menu.themes.THEME_BLUE
+        mytheme = pygame_menu.themes.THEME_ORANGE
 
+        
+        # Set Background Image
+        myimage = pygame_menu.baseimage.BaseImage(
+            image_path="tracks/trophy.jpg"
+        )
+        mytheme.background_color = myimage
         menu1 = pygame_menu.Menu('Results', 1600, 900, theme=mytheme)
-        menu1.add.label("Jakob suxx")
-        menu1.add.label("Jakob suxx1")
-        menu1.add.label("Jakob suxx2")
+
+
+        menu1.add.label("Schnellste Runde:\t" + str(round(self.lapManager.fastestLap, 3)))
+        menu1.add.label("Gesamt Renndauer:\t"+ str(round(time.time() - self.lapManager.raceTimeStart, 3)))
+        menu1.add.label("")
+        
         menu1.add.button('Back to Menu', self.stop)
         
         self.resultScreenExit = False
