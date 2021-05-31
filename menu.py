@@ -120,6 +120,9 @@ menu.add.button('Quit', pygame_menu.events.EXIT)
 
 # Start Game
 if __name__ == '__main__':
+    pygame.mixer.music.load('Music/0EuroBGM1SI-164.wav')
+    pygame.mixer.music.play(-1,0.0)
+    pygame.mixer.music.set_volume(.1)
     logger.debug("RC Drifting - Menu")
     exit = False
     while not exit:  

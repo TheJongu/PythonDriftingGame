@@ -38,7 +38,8 @@ class Game:
         self.exit = False
         self.track = self.loadTrack(aTrack)
         self.car = self.createCar(aCarType, aTrack)
-        
+        self.engineSound = pygame.mixer.Sound('Music/Engine_05.wav')
+        self.engineSound.set_volume(0.1)
 
     def run(self):
         """ Inits all the Runs the game
@@ -53,7 +54,7 @@ class Game:
         car_image = pygame.image.load(image_path).convert_alpha()
         car_image = pygame.transform.scale(car_image, (48,24))        
         pygame.Surface((48,24), )
-
+        pygame.mixer.Sound.play(self.engineSound, -1)
         
         while not self.exit:
             self.lapManager.checkCheckpointPassed(self.car.position)
@@ -74,6 +75,14 @@ class Game:
                 self.car.processInputs(pressed, dt)
             else: 
                 self.finishGame()
+
+            # Sound
+            soundLevel = self.car.speed / 1500
+            if(soundLevel < 0.05): self.engineSound.set_volume(0.05)
+            elif(soundLevel > 0.5): self.engineSound.set_volume(0.5)
+            else: self.engineSound.set_volume(abs(soundLevel))
+            
+
             # Drawing
             self.screen.fill((255,255,255))
             self.screen.blit(self.trackImage, (0,0))
@@ -93,6 +102,9 @@ class Game:
             #pygame.draw.circle(self.screen, (0,255,255), car.displayPos3, 15, 10)
             
             speed = self.car.speed 
+            
+            
+
             if 130 < speed < 137: speed = 130
             textsurfaceVector = self.myfont.render("CarSpeed: " + str(int(speed)), False, (0, 0, 0))
             self.screen.blit(textsurfaceVector,(190,25))
@@ -119,6 +131,7 @@ class Game:
             pygame.display.flip()
 
             self.clock.tick(self.ticks)
+        self.engineSound.stop()
         
 
     def loadTrack(self, aTrack):
