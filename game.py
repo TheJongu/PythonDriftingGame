@@ -38,7 +38,8 @@ class Game:
         self.exit = False
         self.track = self.loadTrack(aTrack)
         self.car = self.createCar(aCarType, aTrack)
-        self.engineSound = pygame.mixer.Sound('Music/Engine_05.wav')
+        if aCarType == 1: self.engineSound = pygame.mixer.Sound('Music/Engine_05.wav')
+        if aCarType == 2: self.engineSound = pygame.mixer.Sound('Music/Engine_07.wav')
         self.engineSound.set_volume(0.1)
 
     def run(self):
@@ -110,7 +111,6 @@ class Game:
             self.screen.blit(textsurfaceVector,(190,25))
 
             textsurfaceVector = self.myfont.render("Last Lap time: " + str(round(self.lapManager.lastLap, 3)), False, (0, 0, 0))
-            #textsurfaceVector = self.myfont.render("Last Lap time: " + str(self.car.steerAngle), False, (0, 0, 0))
             self.screen.blit(textsurfaceVector,(440,25))
 
             textsurfaceVector = self.myfont.render("Fastest Lap: " + str(round(self.lapManager.fastestLap, 3)), False, (0, 0, 0))
@@ -178,6 +178,7 @@ class Game:
             * Is the time correct?
             * Is the text readable?
         """
+        self.engineSound.stop()
         mytheme = pygame_menu.themes.THEME_ORANGE
 
         # Set Background Image
