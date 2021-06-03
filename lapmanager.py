@@ -88,11 +88,4 @@ class LapManager:
         py.draw.circle(aScreen, (0,0,0), checkpoint.position1, 15, 2)
         py.draw.circle(aScreen, (0,0,0), checkpoint.position1+tmpVec, 5, 2)
         py.draw.circle(aScreen, (0,0,0), checkpoint.position1+tmpVec, 15, 2)
-
-
-    
-    
-
-
-
         

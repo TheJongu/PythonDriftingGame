@@ -67,7 +67,7 @@ class Car:
         self.skidMarkList = []
         if aCarType == 1:
             logger.success("Car Created - Driftcar")
-            self.carImage = "car_try.png"
+            self.carImage = "drift_car.png"
             self.driftcarFlag = True
         if aCarType == 2:
             logger.success("Car Created - Racecar")

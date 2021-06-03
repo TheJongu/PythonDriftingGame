@@ -106,10 +106,7 @@ class Game:
             #pygame.draw.circle(self.screen, (255,0,255), car.displayPos2, 15, 10)
             #pygame.draw.circle(self.screen, (0,255,255), car.displayPos3, 15, 10)
             
-            speed = self.car.speed 
-            
-            
-
+            speed = self.car.speed / 3
             if 130 < speed < 137: speed = 130
             textsurfaceVector = self.myfont.render("CarSpeed: " + str(int(speed)), False, (0, 0, 0))
             self.screen.blit(textsurfaceVector,(190,25))
