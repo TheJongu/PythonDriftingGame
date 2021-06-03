@@ -18,7 +18,7 @@ class Car:
     """
 
 
-    def __init__(self, x, y, aMaxSpeed = 600, aBackSpeed = -100, aMinWheelbase = 50, aMaxWheelbase = 500, aHitboxList=[], aCarType = 1):
+    def __init__(self, x, y, aMaxSpeed = 600, aBackSpeed = -100, aMinWheelbase = 50, aMaxWheelbase = 500, aHitboxList=[], aCarType = 1, aRgbFlag = False):
         """Inits the car with parameters, which change the cars behaviour.
 
         Args:
@@ -43,6 +43,7 @@ class Car:
         self.MAXWHEELBASE = aMaxWheelbase
         self.MAXSKIDMARKS = 5000
         self.position = Vector2(x, y)
+        self.rgbFlag = aRgbFlag
 
         self.turningWheel = Vector2(0, 0)
         self.frontWheel = Vector2(0, 0)
@@ -302,7 +303,7 @@ class Car:
             * The Game can handle the amount of SkidMarks
         """     
         for aSkidMark in self.skidMarkList:
-            aSkidMark.update(aScreen,0)
+            aSkidMark.update(aScreen,0, self.rgbFlag)
 
         if(len(self.skidMarkList) > self.MAXSKIDMARKS):
             del self.skidMarkList[:2]

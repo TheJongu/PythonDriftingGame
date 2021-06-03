@@ -55,6 +55,9 @@ def setTrack(value, aTrack):
     """
     menu.track = aTrack
 
+def setRgbMode(value, aRgb):
+    menu.rgb = aRgb
+
 def runGame():
     """ Run the game
 
@@ -63,7 +66,7 @@ def runGame():
     """
     # Start the game
     logger.success("Starting game with settings: Car Type: " + str(menu.carType) + " Track: "+ str(menu.track))
-    myGame = Game(surface, menu.carType, menu.track)
+    myGame = Game(surface, menu.carType, menu.track, menu.rgb)
     myGame.run()
 
 def showControls():
@@ -111,10 +114,12 @@ menu = pygame_menu.Menu('RC DRIFT CAR', 1600, 900, theme=mytheme)
 
 menu.carType = 1
 menu.track = 1
+menu.rgb = False
 # Set menu buttons and selections
 menu.add.button('Play', runGame)
 menu.add.selector('Car : ', [('Drift Car', 1), ('Race Car', 2)], onchange=setCarType)
 menu.add.selector('Track : ', [('Easy', 1), ('Expert', 2)], onchange=setTrack)
+menu.add.selector('RGB Mode : ', [('Off', False), ('On', True)], onchange=setRgbMode)
 menu.add.button("Controls", showControls)
 menu.add.button('Quit', pygame_menu.events.EXIT)
 

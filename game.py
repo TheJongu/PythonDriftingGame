@@ -29,7 +29,7 @@ class Game:
     """
 
     myfont = pygame.font.SysFont('Arial', 30, True)
-    def __init__(self, aScreen, aCarType, aTrack):
+    def __init__(self, aScreen, aCarType, aTrack, aRgbFlag):
         #pygame.init()
         pygame.display.set_caption("Car Drifting Game")
         self.screen = aScreen
@@ -37,7 +37,7 @@ class Game:
         self.ticks = 60
         self.exit = False
         self.track = self.loadTrack(aTrack)
-        self.car = self.createCar(aCarType, aTrack)
+        self.car = self.createCar(aCarType, aTrack, aRgbFlag)
         if aCarType == 1: self.engineSound = pygame.mixer.Sound('Music/Engine_05.wav')
         if aCarType == 2: self.engineSound = pygame.mixer.Sound('Music/Engine_07.wav')
         self.engineSound.set_volume(0.1)
@@ -179,22 +179,26 @@ class Game:
     
     def playerLostScreen(self):
         """Displayes the player list screen after he drove off the screen.
-    
+            Displayes the game over screen from Asphalt Duel
         Tests:
             * Can the player restart form this screen?
             * Is the text readable?
         """
+        self.engineSound.stop()
         mytheme = pygame_menu.themes.THEME_ORANGE
-        self.car.position = (10,10)
+        
         # Set Background Image
         myimage = pygame_menu.baseimage.BaseImage(
-            image_path="tracks/base_track.jpg"
+            image_path="tracks/GameOver.png"
         )
         mytheme.background_color = myimage
         failedScreen = pygame_menu.Menu('YOU FAILED', 1600, 900, theme=mytheme)
-
-
-        failedScreen.add.label("YOU FAILED AND CRASHED YOUR CAR")
+        #Space Exit down        
+        failedScreen.add.label("")
+        failedScreen.add.label("")
+        failedScreen.add.label("")
+        failedScreen.add.label("")
+        failedScreen.add.label("")
         failedScreen.add.label("")
         
         failedScreen.add.button('Back to Menu', self.stopFailedScreen)
@@ -212,7 +216,7 @@ class Game:
         self.failedScreenExit = True
         self.exit = True
 
-    def createCar(self, aCarType, aTrack):
+    def createCar(self, aCarType, aTrack, aRgbFlag):
         """ Creates a new car with the self.carType and self.track
 
         Args:
@@ -223,9 +227,9 @@ class Game:
             * Do driftcar and race car behave differently?
         """
         if aTrack == 1:
-            return Car(200, 100, 401, -100, 20, 800, self.trackdata.track01_hitboxes, aCarType)
+            return Car(200, 100, 401, -100, 20, 800, self.trackdata.track01_hitboxes, aCarType, aRgbFlag)
         else:
-            return Car(200, 100, 401, -100, 20, 800, self.trackdata.track02_hitboxes, aCarType)
+            return Car(800, 400, 401, -100, 20, 800, self.trackdata.track02_hitboxes, aCarType, aRgbFlag)
     
     def finishGame(self):
         """After racing 5 laps, stop the game and show the finish screen.
@@ -245,8 +249,8 @@ class Game:
         resultScreen = pygame_menu.Menu('Results', 1600, 900, theme=mytheme)
 
 
-        resultScreen.add.label("Schnellste Runde:\t" + str(round(self.lapManager.fastestLap, 3)))
-        resultScreen.add.label("Gesamt Renndauer:\t"+ str(round(time.time() - self.lapManager.raceTimeStart, 3)))
+        resultScreen.add.label("Schnellste Runde:  " + str(round(self.lapManager.fastestLap, 3)))
+        resultScreen.add.label("Gesamt Renndauer:  "+ str(round(time.time() - self.lapManager.raceTimeStart, 3)))
         resultScreen.add.label("")
         
         resultScreen.add.button('Back to Menu', self.stopResultMenu)

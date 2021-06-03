@@ -29,6 +29,9 @@ class SkidMark:
         self.Alpha = anAlpha
         self.TimeToLive = 255.0
         self.CarSpeed = aSpeed
+        self.red = 255
+        self.blue = 0
+        self.green = 0
         #Define colors
         self.BLACK = (0 , 0 , 0)
         # Color 77,77,77 is Max lightiness, go down to more black from here
@@ -57,7 +60,7 @@ class SkidMark:
         self.rect = self.new_image.get_rect()
 
 
-    def update(self, screen, dt):    
+    def update(self, screen, dt, rgbFlag = False):    
         """Update the time to live of the skidmark lower until it invisible. Gets deleted from the skidmark list after too many new ones have been created.
 
         Args:
@@ -65,6 +68,8 @@ class SkidMark:
             dt (float): time since last call
         """
         # set the rotated rectangle to the old center  
+        if rgbFlag:
+            self.rgbSkidmarks()
         self.rect.center = self.old_center  
         self.TimeToLive -= .1
         if(self.TimeToLive < 0): self.TimeToLive = 0
@@ -73,18 +78,17 @@ class SkidMark:
         # drawing the rotated skidmark to the screen  
         screen.blit(self.new_image , self.rect)
 
-# #### Temp for RGB-Skidmarks
-# for aSkidMark in self.skidMarkList:
-#             pygame.draw.rect(aScreen, (red, green, blue, 0), aSkidMark, 5, 1)
-#             # if red == 255 and blue == 0:
-#             #     green  += 5
-#             # if green == 255 and blue == 0:
-#             #     red -= 5
-#             # if red == 0 and green == 255:
-#             #     blue += 5
-#             # if blue == 255 and red == 0:
-#             #     green -= 5
-#             # if green == 0 and blue == 255:
-#             #     red  += 5
-#             # if red == 255 and green == 0:
-#             #     blue -= 5
+    def rgbSkidmarks(self):
+        py.draw.circle(self.new_image, (self.red,self.blue,self.green), (4,4), 4, 10)
+        if self.red == 255 and self.blue == 0:
+            self.green  += 5
+        if self.green == 255 and self.blue == 0:
+            self.red -= 5
+        if self.red == 0 and self.green == 255:
+            self.blue += 5
+        if self.blue == 255 and self.red == 0:
+            self.green -= 5
+        if self.green == 0 and self.blue == 255:
+            self.red  += 5
+        if self.red == 255 and self.green == 0:
+            self.blue -= 5

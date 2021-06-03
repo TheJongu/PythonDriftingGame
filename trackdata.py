@@ -53,8 +53,13 @@ class Trackdata:
         self.track02_hitboxes = []
         self.track02_checkpoints = []
 
+        # Hitboxes
+        self.track02_hitboxes.append(Hitbox((0,0),       (1600,15),      50))
+        self.track02_hitboxes.append(Hitbox((0,0),       (15,900),       50))
+        self.track02_hitboxes.append(Hitbox((0,880),     (1600,900),     50))
+        self.track02_hitboxes.append(Hitbox((1580,0),    (1600,900),     50))
+
         # Checkpoints
-        
         # split top 
         self.track02_checkpoints.append(Hitbox((1305, 229),   (1325,367),      0,    False,       True))
         # top middle right
