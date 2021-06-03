@@ -66,6 +66,10 @@ class Game:
                 if event.type == pygame.QUIT:
                     self.exit = True
 
+            # check if car is offscreen
+            if self.checkPlayerOffscreen(self.car.position):
+                self.playerLostScreen()
+               # print("FAILED")
             if self.lapManager.laps != 5:
                 # User input
                 pressed = pygame.key.get_pressed()
@@ -155,6 +159,58 @@ class Game:
             self.trackImage = pygame.image.load("tracks/track_02.jpg")
             self.trackImage = pygame.transform.scale(self.trackImage,(1600,900))
             self.lapManager = LapManager(self.trackdata.track02_checkpoints)
+
+    def checkPlayerOffscreen(self, aPlayerPosition):
+        """Check if the player drove offscreen, returns True if so.
+
+        Args:
+            *  aPlayerPosition (Vector2D): the position of the players car
+
+        Tests:
+            * Does it return true when the player is offscreen?
+            * Does it work on all four sides?
+        """
+    
+        if aPlayerPosition.x < -10: return True
+        if aPlayerPosition.y < -10: return True
+        if aPlayerPosition.x > 1610: return True
+        if aPlayerPosition.y > 910: return True
+        return False
+    
+    def playerLostScreen(self):
+        """Displayes the player list screen after he drove off the screen.
+    
+        Tests:
+            * Can the player restart form this screen?
+            * Is the text readable?
+        """
+        mytheme = pygame_menu.themes.THEME_ORANGE
+        self.car.position = (10,10)
+        # Set Background Image
+        myimage = pygame_menu.baseimage.BaseImage(
+            image_path="tracks/base_track.jpg"
+        )
+        mytheme.background_color = myimage
+        failedScreen = pygame_menu.Menu('YOU FAILED', 1600, 900, theme=mytheme)
+
+
+        failedScreen.add.label("YOU FAILED AND CRASHED YOUR CAR")
+        failedScreen.add.label("")
+        
+        failedScreen.add.button('Back to Menu', self.stopFailedScreen)
+        
+        self.failedScreenExit = False
+        while not self.failedScreenExit:     
+            failedScreen.mainloop(self.screen)
+    def stopFailedScreen(self):
+        """Stop the failedscreen stop the game
+
+        Tests:
+            * Is the failed menu closed correctly?
+            * Is the game reset to the menu?
+        """
+        self.failedScreenExit = True
+        self.exit = True
 
     def createCar(self, aCarType, aTrack):
         """ Creates a new car with the self.carType and self.track
