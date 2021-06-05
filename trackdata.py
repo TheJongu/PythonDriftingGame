@@ -28,10 +28,26 @@ class Trackdata:
             * Are the hitboxes positions correct?
             * Are the hitboxes speeds set?
         """
+
+        self.playground_hitboxes=[]
+        self.playground_checkpoints=[]
+        ### Track: Playground
+        # Outside, on screen hitbox
+        self.playground_hitboxes.append(Hitbox((0,0),       (1600,15),      50))
+        self.playground_hitboxes.append(Hitbox((0,0),       (15,900),       50))
+        self.playground_hitboxes.append(Hitbox((0,880),     (1600,900),     50))
+        self.playground_hitboxes.append(Hitbox((1580,0),    (1600,900),     50))
+        #Start
+        self.playground_checkpoints.append(Hitbox((1150, 470),   (1176,874),      0,    False,       True))
+        self.playground_checkpoints.append(Hitbox((458, 15),   (485,386),      0,    False,       True))
+        self.playground_checkpoints.append(Hitbox((458, 470),   (485,874),      0,    False,       True))
+        self.playground_checkpoints.append(Hitbox((1150, 15),   (1176,386),      0,    False,       True))
+
+        ### Track 01
+        
         self.track01_hitboxes = []
         self.track01_checkpoints = []
 
-        ### Track 01
         # Outside, on screen hitbox
         self.track01_hitboxes.append(Hitbox((0,0),       (1600,15),      50))
         self.track01_hitboxes.append(Hitbox((0,0),       (15,900),       50))

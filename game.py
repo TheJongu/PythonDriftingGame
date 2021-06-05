@@ -170,12 +170,18 @@ class Game:
             * Do the hitboxes word?
         """
         self.trackdata = Trackdata()
+        
+        if aTrack == 0:
+            self.trackImage = pygame.image.load("assets/track_playground.jpg")
+            self.trackImage = pygame.transform.scale(self.trackImage,(1600,900))
+            self.lapManager = LapManager(self.trackdata.playground_checkpoints)
+
+            
         if aTrack == 1:
             self.trackImage = pygame.image.load("assets/track_01.jpg")
             self.trackImage = pygame.transform.scale(self.trackImage,(1600,900))
             self.lapManager = LapManager(self.trackdata.track01_checkpoints)
-        else:
-
+        if aTrack == 2:
             self.trackImage = pygame.image.load("assets/track_02.jpg")
             self.trackImage = pygame.transform.scale(self.trackImage,(1600,900))
             self.lapManager = LapManager(self.trackdata.track02_checkpoints)
@@ -247,9 +253,11 @@ class Game:
             * Is the car set correctly?
             * Do driftcar and race car behave differently?
         """
+        if aTrack == 0:
+            return Car(400, 120, 401, -100, 20, 800, self.trackdata.playground_hitboxes, aCarType, aRgbFlag)
         if aTrack == 1:
-            return Car(200, 100, 401, -100, 20, 800, self.trackdata.track01_hitboxes, aCarType, aRgbFlag)
-        else:
+            return Car(1000, 120, 401, -100, 20, 800, self.trackdata.track01_hitboxes, aCarType, aRgbFlag)
+        if aTrack == 2:
             return Car(800, 400, 401, -100, 20, 800, self.trackdata.track02_hitboxes, aCarType, aRgbFlag)
     
     def finishGame(self):

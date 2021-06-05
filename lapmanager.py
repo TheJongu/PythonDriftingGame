@@ -79,6 +79,7 @@ class LapManager:
             * Are the markers drawn correctly?
             * Do the markers switch color?
         """
+    
         for checkpoint in self.checkpointList:            
             self.drawOneCheckpointMark(checkpoint, aScreen, (150,150,150))
         self.drawOneCheckpointMark(self.currentCheckpoint, aScreen, (0,255,0))

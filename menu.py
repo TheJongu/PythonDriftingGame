@@ -132,12 +132,12 @@ def finishControl():
 menu = pygame_menu.Menu('RC DRIFT CAR', 1600, 900, theme=mytheme)
 
 menu.carType = 1
-menu.track = 1
+menu.track = 0
 menu.rgb = False
 # Set menu buttons and selections
 menu.add.button('Play', runGame)
 menu.add.selector('Car : ', [('Drift Car', 1), ('Race Car', 2)], onchange=setCarType)
-menu.add.selector('Track : ', [('Easy', 1), ('Expert', 2)], onchange=setTrack)
+menu.add.selector('Track : ', [('Playground', 0), ('Easy', 1), ('Expert', 2)], onchange=setTrack)
 menu.add.selector('RGB Mode : ', [('Off', False), ('On', True)], onchange=setRgbMode)
 menu.add.button("Controls", showControls)
 menu.add.button('Quit', pygame_menu.events.EXIT)
