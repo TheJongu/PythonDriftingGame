@@ -1,4 +1,4 @@
-"""
+"""Skidmarks for the car when its accelerating from a standstill or drifting.
 
     author: JONAS GUGEL
     data: 19.03.2021
@@ -12,6 +12,9 @@ import random
 class SkidMark:
     """A SkidMark is a Circle with lines giving it texture, which represents a Tyre-Skidmark when the car drifts, breaks or Accelerates from stand still
     
+    Tests:
+        * Is the Skidmark drawn on the correct position?
+        * Does the color of the Skidmark work?
     """
     # Variables
 
@@ -23,6 +26,10 @@ class SkidMark:
             aRotation (rotation): rotation
             anAlpha (0-255): alpha of the skidmark
             aSpeed (float): Speed of the car
+
+        Tests:
+            * Are the values set correctly?
+            * Does the RGB overwrite the set color?
         """
         self.PositionTuple = aPositionTuple
         self.Rotation = aRotation
@@ -66,6 +73,10 @@ class SkidMark:
         Args:
             screen (pygame-screen): the screen
             dt (float): time since last call
+
+        Tests: 
+            * Does the skidmark get a lower alpha over time?
+            * Does the skidmark fade out and a appropriate speed?
         """
         # set the rotated rectangle to the old center  
         if rgbFlag:
@@ -79,6 +90,12 @@ class SkidMark:
         screen.blit(self.new_image , self.rect)
 
     def rgbSkidmarks(self):
+        """adjusts the color of the Image to be changing RGB.
+
+        Tests:
+            * Does it cycle?
+            * Do the colors looooook preeety? - yes, yes they do.
+        """
         py.draw.circle(self.new_image, (self.red,self.blue,self.green), (4,4), 4, 10)
         if self.red == 255 and self.blue == 0:
             self.green  += 5

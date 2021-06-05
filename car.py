@@ -15,6 +15,12 @@ from loguru import logger
 
 class Car:
     """A class to represent the driving car on screen with the necessary calculations to simulate the driving physics.
+
+    Tests:
+        * Does the driving feel realistic?
+        * Does the drifting work fine?
+        * Can the car be a drift car and a race car?
+
     """
 
 
@@ -28,6 +34,8 @@ class Car:
             aBackSpeed (int, optional): max speed the car can go reverse. Defaults to -100.
             aMinWheelbase (int, optional): the minimum distance the simulated wheels can be appart, usually when slow/standing, impacts slow turing. Defaults to 50.
             aMaxWheelbase (int, optional): the maximum distance the simulated wheels can be appart, usually when highspeed, impacts the drifting handling massively. Defaults to 500.
+            aCarType (int, optional): Car type, 1 = driftcar, 2 = racecar
+            aRgbFlag (boolean, optional): Rgb Flag, turns the skidmarks to rgb
 
         SOURCES:   
             Car pictures have been taken from:
@@ -44,7 +52,7 @@ class Car:
         self.MAXSKIDMARKS = 5000
         self.position = Vector2(x, y)
         self.rgbFlag = aRgbFlag
-
+        # Vectors
         self.turningWheel = Vector2(0, 0)
         self.frontWheel = Vector2(0, 0)
         self.displayPosFront = Vector2(0, 0)
@@ -67,11 +75,11 @@ class Car:
         self.skidMarkList = []
         if aCarType == 1:
             logger.success("Car Created - Driftcar")
-            self.carImage = "drift_car.png"
+            self.carImage = "assets/drift_car.png"
             self.driftcarFlag = True
         if aCarType == 2:
             logger.success("Car Created - Racecar")
-            self.carImage = "race_car.png"
+            self.carImage = "assets/race_car.png"
             self.driftcarFlag = False
         
             
@@ -91,14 +99,17 @@ class Car:
         # If the car goes over Hitboxes, this currentFrontSpeed will be set lower or higher 
         self.currentFrontSpeed = self.MAXFRONTSPEED
 
+        # steer left - W, C, ^
         if aPressedKey[pygame.K_UP] or aPressedKey[pygame.K_w] or aPressedKey[pygame.K_c]:
             self.accelerate()
+        # steer left - S, X, (arrow down) 
         elif aPressedKey[pygame.K_DOWN] or aPressedKey[pygame.K_s] or aPressedKey[pygame.K_x]:
             self.decelerate()
         
         self.calculateHitboxes()
         self.friction()
 
+        # Deceleration for drifting to hard, added to the friction
         theDeceleration = 0
         if abs(self.steerAngle) > 1.6: theDeceleration += 5 
         if abs(self.steerAngle) > 2.0: theDeceleration += 5
@@ -110,29 +121,26 @@ class Car:
 
         if abs(self.speed) < 10: self.steerAngle = 0
 
+        # steer right - D, M, ->
         if aPressedKey[pygame.K_RIGHT] or aPressedKey[pygame.K_d] or aPressedKey[pygame.K_m]:
             if(self.driftcarFlag):
                 self.steerRightDrift()
             else:
                 self.steerRightRace()
+        # steer left - A, N, <-
         elif aPressedKey[pygame.K_LEFT] or aPressedKey[pygame.K_a] or aPressedKey[pygame.K_n]:
             if(self.driftcarFlag):
                 self.steerLeftDrift()
             else:
                 self.steerLeftRace()
+        # Race car goes straight if not turing
         elif not self.driftcarFlag:
             self.steerAngle = 0
         else:
             self.decreaseSteeringDrift()
-
+        # Speedboost
         if aPressedKey[pygame.K_SPACE]:
             self.speed = self.speed + 20
-
-        # reset
-        if aPressedKey[pygame.K_r]:
-            self.position = (200,200)
-        
-        
 
         # Move the car
         self.update(aDelta)
@@ -144,7 +152,6 @@ class Car:
             * Car can not be faster then the MAXFRONTSPEED 
             * Car does not "Jump" to positive speed when acc while driving backwards
         """
-        
         if(self.speed < self.MAXFRONTSPEED): self.speed += 8
     
     def decelerate(self):
@@ -154,7 +161,6 @@ class Car:
             * Car can not be faster then the MAXBACKSPEED
             * Car does not "Jump" to negative speed when breaking
         """
-
         self.speed -= 8
         if(self.speed < self.MAXBACKSPEED): self.speed = self.MAXBACKSPEED
         # Draw breaking skidmarks
@@ -189,7 +195,6 @@ class Car:
             * Car turns slower the more its turned
             * Countersteering works as expected from the User
         """
-
         theSteerAngle = -0.01
         if abs(self.speed) > 0:
             if self.steerAngle > 0: theSteerAngle = -0.05
@@ -222,6 +227,13 @@ class Car:
             self.steerAngle = 0
 
     def decreaseSteeringDrift(self):
+        """Decrease the steering angle of the drift car over time, so it moves to the middle, like in a real car.
+        For more intuitive steering
+
+        Tests: 
+            * Does the car steer back?
+            * Does it feel "right" and not iritating?
+        """
         if self.steerAngle > 0.05:
             self.steerAngle -= 0.025
         if self.steerAngle < -0.05:
@@ -243,8 +255,6 @@ class Car:
             elif self.speed < 350:   self.steerAngle = 0.60
             elif self.speed < 450:   self.steerAngle = 0.40
             elif self.speed < 800:   self.steerAngle = 0.10
-            
-
         else:
             self.steerAngle = 0
 
@@ -263,7 +273,6 @@ class Car:
             elif self.speed < 350:   self.steerAngle = -0.60
             elif self.speed < 450:   self.steerAngle = -0.40
             elif self.speed < 800:   self.steerAngle = -0.10
-            
         else:
             self.steerAngle = 0
 
@@ -272,8 +281,8 @@ class Car:
         The slower the car is, the shorter the wheelbase is, with a minimum of MINWHEELBASE 
 
         Tests:
-            * The Wheelbase of the car can not be smaller/bigger then the defined MINWHEELBASE/MAXWHEELBASE of the car
-            * The calculation is correct
+            * The Wheelbase of the car can not be smaller/bigger then the defined MINWHEELBASE/MAXWHEELBASE of the car?
+            * The calculation is correct?
         """       
         if(self.driftcarFlag):
             self.wheelBase = abs(self.speed)/2
@@ -298,9 +307,10 @@ class Car:
             aScreen (pygame.surface): the screen the skidmarks are to be drawn to
 
         Tests:
-            * Skidmars are being drawn.
-            * If too many SkidMarks exist, the last 2 are deleted
-            * The Game can handle the amount of SkidMarks
+            * Skidmars are being drawn?
+            * If too many SkidMarks exist, the last 2 are deleted?
+            * The Game can handle the amount of SkidMarks?
+            * Change the Skidmarks color?
         """     
         for aSkidMark in self.skidMarkList:
             aSkidMark.update(aScreen,0, self.rgbFlag)
@@ -327,11 +337,7 @@ class Car:
     def calcWheelPositions(self, dt):
         """Calucates the wheelPosition of the Car. 
 
-        The Code is based on the idea from:
-        Source: http://engineeringdotnet.blogspot.com/2010/04/simple-2d-car-physics-in-games.html
-        Used on date: April 2021  
-        This code has been taken and implemented. However his code works for "traditional driving physics". Meaning: Actual driving with frontwheel steering.
-        This was not the scope of this project. So I majorly adjusted the codea and his basic idea, which allows me to simulate a drift.
+        
 
         Args:
             dt : The timedelta since the last call
@@ -352,6 +358,13 @@ class Car:
 
     def backWheelTurningWheel(self, dt):    
         """Calculate the wheel positions with the backwheel turning.
+        The Code is based on the idea from:
+        Source: http://engineeringdotnet.blogspot.com/2010/04/simple-2d-car-physics-in-games.html
+        Used on date: April 2021  
+        This code has been taken and implemented. However his code works for "traditional driving physics". Meaning: Actual driving with frontwheel steering.
+        This was not the scope of this project. So I majorly adjusted the code and his basic idea, which allows me to simulate a drift.
+        This has been done by changing the wheelbase based on the speed of the car.
+        For the Race car the Wheelbase is only slightly adjusted to sim grip.
 
         Args:
             dt : The timedelta since the last call
@@ -372,6 +385,13 @@ class Car:
 
     def frontWheelTurningWheel(self, dt):
         """Calculate the wheel positions with the fronwheel turning.
+        The Code is based on the idea from:
+        Source: http://engineeringdotnet.blogspot.com/2010/04/simple-2d-car-physics-in-games.html
+        Used on date: April 2021  
+        This code has been taken and implemented. However his code works for "traditional driving physics". Meaning: Actual driving with frontwheel steering.
+        This was not the scope of this project. So I majorly adjusted the code and his basic idea, which allows me to simulate a drift.
+        This has been done by changing the wheelbase based on the speed of the car.
+        For the Race car the Wheelbase is only slightly adjusted to sim grip.
 
         Args:
             dt : The timedelta since the last call
@@ -401,6 +421,7 @@ class Car:
 
         self.displayPosFront = self.position + 70 * Vector2( cos(self.direction) , sin(self.direction))
         self.displayPosBack = self.position + 20 * Vector2( cos(self.direction) , sin(self.direction))
+        # Display Postions for Car and Debugging
         self.displayPos1 = self.position - 15 * Vector2( cos(self.direction) , sin(self.direction))
         self.displayPos2 = self.position + 40 * Vector2( cos(self.direction) , sin(self.direction))
         self.displayPos3 = self.position + 50 * Vector2( cos(self.direction) , sin(self.direction))
@@ -440,7 +461,6 @@ class Car:
         """
         self.updateSkidmarkOffsetVector()
         if abs(self.steerAngle) > 0.8 and self.speed > 0:
-
             self.skidMarkList.append(SkidMark((self.displayPos1.x + self.skidmarkOffsetVector.x, self.displayPos1.y + self.skidmarkOffsetVector.y),degrees(-self.direction), self.steerAngle, self.speed))
             self.skidMarkList.append(SkidMark((self.displayPos1.x - self.skidmarkOffsetVector.x, self.displayPos1.y - self.skidmarkOffsetVector.y),degrees(-self.direction), self.steerAngle, self.speed))
         if  0 < self.speed < 100:

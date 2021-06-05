@@ -1,7 +1,13 @@
-"""
+"""Lapmanager of the RC-Driftcar game
+Checks if the player has driven through a checkpoint and counts the Laps
+    
     author: JONAS GUGEL
     data: 19.03.2021
     licence: free
+
+Tests:
+    * Do the Laps get counted correctly?
+    * Is the Laptime accurate?
 
 """
 import pygame as py
@@ -12,7 +18,10 @@ from loguru import logger
 
 class LapManager:
     """A Hitbox is a invisible rect, which defines areas. These can be used to change the cars speed.
-    
+
+    Tests: 
+        * Does the Lapmanager adjust to different tracks?
+        * Does it work with any amount of Checkpoints?
     """
     # Variables
 
@@ -21,6 +30,10 @@ class LapManager:
 
         Args:
             aCheckpointList ([type]): The Checkpoints of the racetrack
+
+        Tests:
+            * Do the values get set correctly?
+            * Does the checkpointlist work?
         """
         self.startTime = 0
         self.raceTimeStart = 0
@@ -77,6 +90,10 @@ class LapManager:
             checkpoint (hitbox): the hitbox of the checkpoint
             aScreen (pygame screen): the screen to draw on
             aColor (rgb tuple): the color
+        
+        Tests:
+            * Does the checkpoint get drawn correctly?
+            * Does a checkpoints both sides get drawn?
         """
         tmpVec = Vector2(0,0)
         if checkpoint.dimensions.x < checkpoint.dimensions.y: tmpVec = (0,checkpoint.dimensions.y)

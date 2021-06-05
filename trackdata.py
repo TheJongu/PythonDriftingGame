@@ -1,4 +1,4 @@
-"""
+"""All the Trackdata for the two tracks of the game are saved in this file
 
     author: JONAS GUGEL
     data: 19.03.2021
@@ -15,10 +15,18 @@ class Trackdata:
     Source for the baseassets of the race track, which have been modified:
     https://opengameart.org/content/race-track-tiles-0
 
+    Tests: 
+        * Is the Trackdata correctly imported?
+        * Does switchting the Track work?
 
     """
     def __init__(self):
         """Inits trackdata and creates all the hitboxes for the tracks
+
+        Tests:
+            * Are the checkpoints positions correct?
+            * Are the hitboxes positions correct?
+            * Are the hitboxes speeds set?
         """
         self.track01_hitboxes = []
         self.track01_checkpoints = []

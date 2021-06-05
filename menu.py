@@ -1,12 +1,16 @@
-"""Main Menu of the Car Drifting Game
+"""Main Menu of the Car Drifting Game  
 
     author: JONAS GUGEL
     data: 17.04.2021
     licence: free
     Source: https://pygame-menu.readthedocs.io/en/4.0.4/
 
-    Backgroundimage of the menu has been taken from the 1998 Game "Asphalt Duel" by Rondomania.
+    Backgroundimage of the menu as the "You Crashed"-Screen has been taken from the 1998 Game "Asphalt Duel" by Rondomania.
     This Image has been changed and edited.
+
+    Tests: 
+        * Does the menu work correctly?
+        * Does the Game close correclty?
 
 """
 import os
@@ -28,7 +32,7 @@ mytheme = pygame_menu.themes.THEME_DEFAULT
 
 # Set Background Image
 myimage = pygame_menu.baseimage.BaseImage(
-    image_path="tracks/AsphaltDuell_edited.jpg"
+    image_path="assets/AsphaltDuell_edited.jpg"
 )
 mytheme.background_color = myimage
 
@@ -60,6 +64,16 @@ def setTrack(value, aTrack):
     menu.track = aTrack
 
 def setRgbMode(value, aRgb):
+    """Sets the RGB Mode
+
+    Args:
+        value (key/val): the full value
+        aRgb (val): the rgb mode value
+
+    Tests:
+        * Is the RGB Mode set correctly?
+        * Is the RGB Mode switchable?
+    """
     menu.rgb = aRgb
 
 def runGame():
@@ -67,6 +81,7 @@ def runGame():
 
     Tests:
         * Does the game run?
+        * Does the game stop?
     """
     # Start the game
     logger.success("Starting game with settings: Car Type: " + str(menu.carType) + " Track: "+ str(menu.track))
@@ -84,7 +99,7 @@ def showControls():
 
     # Set Background Image
     controlImage = pygame_menu.baseimage.BaseImage(
-        image_path="tracks/Keyboardlayout.jpg"
+        image_path="assets/Keyboardlayout.jpg"
     )
     controlTheme.background_color = controlImage
     controlMenu = pygame_menu.Menu('Controls', 1600, 900, theme=controlTheme)
@@ -100,7 +115,7 @@ def showControls():
     controlMenu.add.label("")
     controlMenu.add.label("")
     controlMenu.add.label("")
-    # Quit
+    # Quit - back to menu
     controlMenu.add.button('Back to Menu', finishControl)
     menu.controlMenuExit = False
     while not menu.controlMenuExit:     

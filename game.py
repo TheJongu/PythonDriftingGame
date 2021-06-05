@@ -1,6 +1,6 @@
 """The Game which uses the other python files.
 
-Runs a simple drifting game.
+Runs a simple RC-Drifting and Racing Game.
 
     author: JONAS GUGEL
     data: 19.03.2021
@@ -24,20 +24,38 @@ from lapmanager import LapManager
 from loguru import logger
 
 class Game:
-    """ The Game Class, of which the object handles all the basic of the game
+    """ The Game Class, of which the object handles all the basic of the game.
+
+    Tests:
+        * Does the Game run?
+        * Does the Game stop correctly?
         
     """
 
     myfont = pygame.font.SysFont('Arial', 30, True)
     def __init__(self, aScreen, aCarType, aTrack, aRgbFlag):
+        """Init of the Game, sets all basic values
+
+        Args:
+            aScreen (pygame screen): [description]
+            aCarType (1 or 2): 1 = driftcar, 2 = Racecar
+            aTrack (1 or 2): 1 = easy, 2 = Racecar
+            aRgbFlag (Boolean): RGB Flag
+
+        Test:
+            * Get the flags and values set correctly?
+            * Can you rechange the args after once started the game?
+        """
         #pygame.init()
         pygame.display.set_caption("Car Drifting Game")
         self.screen = aScreen
         self.clock = pygame.time.Clock()
+        # 60 FPS
         self.ticks = 60
         self.exit = False
         self.track = self.loadTrack(aTrack)
         self.car = self.createCar(aCarType, aTrack, aRgbFlag)
+        # Set Sound
         if aCarType == 1: self.engineSound = pygame.mixer.Sound('Music/Engine_05.wav')
         if aCarType == 2: self.engineSound = pygame.mixer.Sound('Music/Engine_07.wav')
         self.engineSound.set_volume(0.1)
@@ -57,10 +75,12 @@ class Game:
         pygame.Surface((48,24), )
         pygame.mixer.Sound.play(self.engineSound, -1)
         
+        # Game loop
         while not self.exit:
-            self.lapManager.checkCheckpointPassed(self.car.position)
             dt = self.clock.get_time() / 1000
-
+            
+            # Check if the car drove through the checkpoints
+            self.lapManager.checkCheckpointPassed(self.car.position)
             # Event queue
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -68,8 +88,9 @@ class Game:
 
             # check if car is offscreen
             if self.checkPlayerOffscreen(self.car.position):
+                # Fail
                 self.playerLostScreen()
-               # print("FAILED")
+               
             if self.lapManager.laps != 5:
                 # User input
                 pressed = pygame.key.get_pressed()
@@ -79,6 +100,7 @@ class Game:
 
                 self.car.processInputs(pressed, dt)
             else: 
+                # Finish screen
                 self.finishGame()
 
             # Sound
@@ -86,7 +108,6 @@ class Game:
             if(soundLevel < 0.05): self.engineSound.set_volume(0.05)
             elif(soundLevel > 0.5): self.engineSound.set_volume(0.5)
             else: self.engineSound.set_volume(abs(soundLevel))
-            
 
             # Drawing
             self.screen.fill((255,255,255))
@@ -106,17 +127,19 @@ class Game:
             #pygame.draw.circle(self.screen, (255,0,255), car.displayPos2, 15, 10)
             #pygame.draw.circle(self.screen, (0,255,255), car.displayPos3, 15, 10)
             
+            #HUD Text
             speed = self.car.speed / 3
             if 130 < speed < 137: speed = 130
-            textsurfaceVector = self.myfont.render("CarSpeed: " + str(int(speed)), False, (0, 0, 0))
+            # Carspeed
+            textsurfaceVector = self.myfont.render("Speed: " + str(int(speed)), False, (0, 0, 0))
             self.screen.blit(textsurfaceVector,(190,25))
-
+            # Last Lap
             textsurfaceVector = self.myfont.render("Last Lap time: " + str(round(self.lapManager.lastLap, 3)), False, (0, 0, 0))
             self.screen.blit(textsurfaceVector,(440,25))
-
+            # Fastest Lap
             textsurfaceVector = self.myfont.render("Fastest Lap: " + str(round(self.lapManager.fastestLap, 3)), False, (0, 0, 0))
             self.screen.blit(textsurfaceVector,(780,25))
-
+            # Lap Counter
             textsurfaceVector = self.myfont.render("Lap: " + str(self.lapManager.laps) + "/5", False, (0, 0, 0))
             self.screen.blit(textsurfaceVector,(1100,25))
 
@@ -128,10 +151,10 @@ class Game:
             #for hitbox in trackdata.track02_checkpoints:        
             #    hitbox.drawDebugHitbox(self.screen, car.position)
 
-
+            # Flip Screen
             pygame.display.flip()
-
             self.clock.tick(self.ticks)
+        # If done, stop Engine sound
         self.engineSound.stop()
         
 
@@ -148,12 +171,12 @@ class Game:
         """
         self.trackdata = Trackdata()
         if aTrack == 1:
-            self.trackImage = pygame.image.load("tracks/track_01.jpg")
+            self.trackImage = pygame.image.load("assets/track_01.jpg")
             self.trackImage = pygame.transform.scale(self.trackImage,(1600,900))
             self.lapManager = LapManager(self.trackdata.track01_checkpoints)
         else:
 
-            self.trackImage = pygame.image.load("tracks/track_02.jpg")
+            self.trackImage = pygame.image.load("assets/track_02.jpg")
             self.trackImage = pygame.transform.scale(self.trackImage,(1600,900))
             self.lapManager = LapManager(self.trackdata.track02_checkpoints)
 
@@ -177,6 +200,7 @@ class Game:
     def playerLostScreen(self):
         """Displayes the player list screen after he drove off the screen.
             Displayes the game over screen from Asphalt Duel
+
         Tests:
             * Can the player restart form this screen?
             * Is the text readable?
@@ -186,7 +210,7 @@ class Game:
         
         # Set Background Image
         myimage = pygame_menu.baseimage.BaseImage(
-            image_path="tracks/GameOver.png"
+            image_path="assets/GameOver.png"
         )
         mytheme.background_color = myimage
         failedScreen = pygame_menu.Menu('YOU FAILED', 1600, 900, theme=mytheme)
@@ -240,7 +264,7 @@ class Game:
 
         # Set Background Image
         myimage = pygame_menu.baseimage.BaseImage(
-            image_path="tracks/trophy.jpg"
+            image_path="assets/trophy.jpg"
         )
         mytheme.background_color = myimage
         resultScreen = pygame_menu.Menu('Results', 1600, 900, theme=mytheme)
