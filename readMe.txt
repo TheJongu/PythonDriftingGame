@@ -24,5 +24,8 @@ Funktionsumfang des Spiels:
 Die Hitboxen wurden so implementiert, dass es auch möglich ist das Auto in einem bestimmten Bereich schneller Fahren zu Lassen,
 also im Endeffekt Boost-Pads, auf welchen das Auto schneller wird. Das wurde nicht in den gebauten Strecken verwendet.
 
+Die Strecken habe ich selbst aus Streckenteilen zusammengebaut und selbst designed.
+Andere Grafiken habe ich nur minimal angepasst.
+Die Menu-Bilder wurden von dem Spiel Asphalt Duel von Rondomedia (1998) entnommen und angepasst.
 
 Sollte hiervon etwas nicht funktionieren, bitte mich kontaktieren.
