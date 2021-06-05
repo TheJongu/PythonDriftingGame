@@ -1,4 +1,0 @@
-Python: 3.8.8
-Pygame: 2.0.1           pip install pygame==2.0.1    
-Pygame-menu: 4.0.5      pip install pygame-menu==4.0.5
-Loguru: 0.5.3           pip install loguru==0.5.3
