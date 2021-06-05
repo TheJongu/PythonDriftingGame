@@ -17,7 +17,11 @@ import pygame_menu
 from game import Game
 from loguru import logger
 pygame.init()
+#Remove console output
+logger.remove()
+# add logfile
 logger.add("log/file_{time}.log", backtrace=True, diagnose=True)
+
 surface = pygame.display.set_mode((1600, 900))
 
 mytheme = pygame_menu.themes.THEME_DEFAULT
